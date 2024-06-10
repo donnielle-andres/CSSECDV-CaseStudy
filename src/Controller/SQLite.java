@@ -204,21 +204,19 @@ public class SQLite {
         String hashedPass;
 
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement pstmt = conn.prepareStatement(sql)) {
-            try (ResultSet rs = pstmt.executeQuery(sql)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
                 if (rs.next()) {
                     hashedPass = rs.getString("password");
                 } else {
                     System.out.println("Username or Password is incorrect");
                     return false;
                 }
+            } catch (Exception ex) {
+                System.out.println("Error retrieving user: " + ex.getMessage());
+                ex.printStackTrace();
+                return false;
             }
-
-        } catch (Exception ex) {
-            System.out.println("Error retrieving user: " + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
 
         if (hashedPass != null) {
             return Passwordhashing.checkPassword(password, hashedPass);
