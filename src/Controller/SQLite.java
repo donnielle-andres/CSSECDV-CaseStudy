@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import Model.Passwordhashing;
 
 public class SQLite {
     
@@ -180,7 +181,8 @@ public class SQLite {
     }
     
     public void addUser(String username, String password) {
-        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
+        String hashedPassword = Passwordhashing.hashPassword(password);
+        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + hashedPassword + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
@@ -197,6 +199,34 @@ public class SQLite {
         }
     }
     
+    public boolean validateUser(String username, String password) {
+        String sql = "SELECT password FROM users WHERE username='" + username + "';";
+        String hashedPass;
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement pstmt = conn.prepareStatement(sql)) {
+            try (ResultSet rs = pstmt.executeQuery(sql)) {
+                if (rs.next()) {
+                    hashedPass = rs.getString("password");
+                } else {
+                    System.out.println("Username or Password is incorrect");
+                    return false;
+                }
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error retrieving user: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+
+        if (hashedPass != null) {
+            return Passwordhashing.checkPassword(password, hashedPass);
+        } else {
+            return false;
+        }
+    }
+
     
     public ArrayList<History> getHistory(){
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
@@ -280,7 +310,8 @@ public class SQLite {
     }
     
     public void addUser(String username, String password, int role) {
-        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + password + "','" + role + "')";
+        String hashedPassword = Passwordhashing.hashPassword(password);
+        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + hashedPassword + "','" + role + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
