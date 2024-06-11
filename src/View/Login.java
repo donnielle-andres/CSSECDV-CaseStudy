@@ -99,9 +99,12 @@ public class Login extends javax.swing.JPanel {
         String actualPassword = new String(passwordArray);
         boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
         if (loginSuccessful) {
-            frame.mainNav();
+            frame.mainNav(usernameFld.getText());
+            usernameFld.setText("");
+            passwordFld.setText("");
         } else {
             JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            passwordFld.setText("");
         }
 
     }//GEN-LAST:event_loginBtnActionPerformed

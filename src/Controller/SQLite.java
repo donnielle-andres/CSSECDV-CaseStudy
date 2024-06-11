@@ -307,6 +307,32 @@ public class SQLite {
         return users;
     }
     
+    public User getUserInfo(String username) {
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username='" + username + "';";
+        User activeUser = null;
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)){
+                if (rs.next()) {
+                    activeUser = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked")
+                    );
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace(); 
+        }
+
+        return activeUser;
+    }
+
+    
+    
     public void addUser(String username, String password, int role) {
         String hashedPassword = Passwordhashing.hashPassword(password);
         String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + hashedPassword + "','" + role + "')";

@@ -1,9 +1,11 @@
 package View;
 
 import Controller.Main;
+import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
@@ -244,8 +246,56 @@ public class Frame extends javax.swing.JFrame {
         this.setVisible(true);
     }
     
-    public void mainNav(){
+    public void hideAllButtons(){
+        adminBtn.setVisible(false);
+        managerBtn.setVisible(false);
+        staffBtn.setVisible(false);
+        clientBtn.setVisible(false);
+        adminBtn.setEnabled(false);
+        managerBtn.setEnabled(false);
+        staffBtn.setEnabled(false);
+        clientBtn.setEnabled(false);
+    }
+    
+    public void mainNav(String Username){
         frameView.show(Container, "homePnl");
+        hideAllButtons();
+        System.out.println(Username);
+        User activeUser = main.sqlite.getUserInfo(Username);
+        int activeUserRole = activeUser.getRole();
+        switch (activeUserRole){
+        case 5: //admin
+            adminBtn.setVisible(true);
+            adminBtn.setEnabled(true);
+            adminHomePnl.showPnl("home");
+            contentView.show(Content, "adminHomePnl");
+            
+            break;
+        case 4: //manager
+            managerBtn.setVisible(true);
+            managerBtn.setEnabled(true);
+            managerHomePnl.showPnl("home");
+            contentView.show(Content, "managerHomePnl");
+            break;
+        case 3: //staff
+            staffBtn.setVisible(true);
+            staffBtn.setEnabled(true);
+            staffHomePnl.showPnl("home");
+            contentView.show(Content, "staffHomePnl");
+            break;
+        case 2: //client
+            clientBtn.setVisible(true);
+            clientBtn.setEnabled(true);
+            clientHomePnl.showPnl("home");
+            contentView.show(Content, "clientHomePnl");
+            break;
+        default: // ???
+            JOptionPane.showMessageDialog(Container, "A fatal error occured. Please login again", "Unknown Error", JOptionPane.ERROR_MESSAGE);
+            frameView.show(Container, "loginPnl");
+            break;
+        }
+        
+        
     }
     
     public void loginNav(){
