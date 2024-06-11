@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import Model.Passwordhashing;
+import java.sql.PreparedStatement;
 
 public class SQLite {
     
@@ -182,11 +183,16 @@ public class SQLite {
     
     public void addUser(String username, String password) {
         String hashedPassword = Passwordhashing.hashPassword(password);
-        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + hashedPassword + "')";
-        
+        String sql = "INSERT INTO users(username,password) VALUES(?,?)";
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword);
+            pstmt.executeUpdate();
+//        String sql = "INSERT INTO users(username, password) VALUES('" + username + "', '" + hashedPassword + "');";
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//            Statement stmt = conn.createStatement()){
+//            stmt.execute(sql);
             
 //      PREPARED STATEMENT EXAMPLE
 //      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
@@ -200,23 +206,28 @@ public class SQLite {
     }
     
     public boolean validateUser(String username, String password) {
-        String sql = "SELECT password FROM users WHERE username='" + username + "';";
-        String hashedPass;
+        String sql = "SELECT password FROM users WHERE username = ?";
+        String hashedPass = null;
 
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Set the value for the username parameter
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     hashedPass = rs.getString("password");
                 } else {
                     System.out.println("Username or Password is incorrect");
                     return false;
                 }
-            } catch (Exception ex) {
-                System.out.println("Error retrieving user: " + ex.getMessage());
-                ex.printStackTrace();
-                return false;
             }
+        } catch (Exception ex) {
+            System.out.println("Error retrieving user: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
 
         if (hashedPass != null) {
             return Passwordhashing.checkPassword(password, hashedPass);
@@ -224,7 +235,6 @@ public class SQLite {
             return false;
         }
     }
-
     
     public ArrayList<History> getHistory(){
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
