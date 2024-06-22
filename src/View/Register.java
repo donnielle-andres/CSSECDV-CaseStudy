@@ -1,6 +1,8 @@
 
 package View;
 
+import javax.swing.JOptionPane;
+
 public class Register extends javax.swing.JPanel {
 
     public Frame frame;
@@ -14,10 +16,10 @@ public class Register extends javax.swing.JPanel {
     private void initComponents() {
 
         registerBtn = new javax.swing.JButton();
-        passwordFld = new javax.swing.JTextField();
+        passwordFld = new javax.swing.JPasswordField();
         usernameFld = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        confpassFld = new javax.swing.JTextField();
+        confpassFld = new javax.swing.JPasswordField();
         backBtn = new javax.swing.JButton();
 
         registerBtn.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -97,7 +99,23 @@ public class Register extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        frame.registerAction(usernameFld.getText(), passwordFld.getText(), confpassFld.getText());
+        char[] passwordArray = passwordFld.getPassword();
+        String actualPassword = new String(passwordArray);
+        char[] confpasswordArray = confpassFld.getPassword();
+        String actualConfPassword = new String(confpasswordArray);
+        boolean registerSuccessful = frame.registerAction(usernameFld.getText(), actualPassword, actualConfPassword);
+        if (registerSuccessful) {    
+            JOptionPane.showMessageDialog(frame, "Registration Successful! You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
+            frame.loginNav();
+            usernameFld.setText("");
+            passwordFld.setText("");
+            confpassFld.setText("");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Registration failed. Please check your username and password.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+            passwordFld.setText("");
+            confpassFld.setText("");
+            frame.registerNav();
+        }
         frame.loginNav();
     }//GEN-LAST:event_registerBtnActionPerformed
 
@@ -108,9 +126,9 @@ public class Register extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextField confpassFld;
+    private javax.swing.JPasswordField confpassFld;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField passwordFld;
+    private javax.swing.JPasswordField passwordFld;
     private javax.swing.JButton registerBtn;
     private javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables

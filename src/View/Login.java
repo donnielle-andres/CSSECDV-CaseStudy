@@ -8,7 +8,6 @@ public class Login extends javax.swing.JPanel {
     
     public Login() {
         initComponents();
-        passwordFld.setEchoChar('*');
     }
 
     @SuppressWarnings("unchecked")
@@ -99,6 +98,7 @@ public class Login extends javax.swing.JPanel {
         String actualPassword = new String(passwordArray);
         boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
         if (loginSuccessful) {
+            
             frame.mainNav(usernameFld.getText());
             usernameFld.setText("");
             passwordFld.setText("");

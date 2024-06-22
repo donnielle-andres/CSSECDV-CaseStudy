@@ -306,8 +306,13 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "registerPnl");
     }
     
-    public void registerAction(String username, String password, String confpass){
-        main.sqlite.addUser(username, password);
+    public boolean registerAction(String username, String password, String confpass) {
+        if (password.equals(confpass)) {
+            main.sqlite.addUser(username, password);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public boolean loginAction(String username, String password){
