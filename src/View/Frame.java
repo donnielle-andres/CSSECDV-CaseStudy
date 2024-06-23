@@ -1,5 +1,6 @@
 package View;
 
+//import Controller.IdleLogoutTimer;
 import Controller.Main;
 import Model.User;
 import java.awt.BorderLayout;
@@ -7,6 +8,8 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Frame extends javax.swing.JFrame {
 
@@ -316,7 +319,14 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public boolean loginAction(String username, String password){
-        return main.sqlite.validateUser(username, password);
+        boolean validator = main.sqlite.validateUser(username, password);
+        if (validator = true){
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            String formattedDateTime = currentDateTime.format(formatter);
+            main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
+        }
+        return validator;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
