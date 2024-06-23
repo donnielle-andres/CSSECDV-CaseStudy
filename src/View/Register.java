@@ -104,7 +104,7 @@ public class Register extends javax.swing.JPanel {
         String confirmPassword = confpassFld.getText();
 
         // Validate the password
-        if (PasswordFunctions.validatePassword(password, username)) {
+        if (PasswordFunctions.validatePassword(password, username) && UsernameFunctions.validateUsername(username)) {
 
             boolean registerSuccessful = frame.registerAction(username, password, confirmPassword);
             if (registerSuccessful) {
@@ -116,16 +116,13 @@ public class Register extends javax.swing.JPanel {
                 passwordFld.setText("");
                 confpassFld.setText("");
                 
-            } else {
-                JOptionPane.showMessageDialog(frame, "Registration failed. Please check your username and password.", "Registration Error", JOptionPane.ERROR_MESSAGE);
-                // Clear password fields
-                usernameFld.setText("");
-                passwordFld.setText("");
-                confpassFld.setText("");
+           
             }
+            
         } else {
-            JOptionPane.showMessageDialog(frame, "Password does not meet the criteria.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Username and Password does not meet the criteria.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             // Clear password fields on validation failure
+            usernameFld.setText("");
             passwordFld.setText("");
             confpassFld.setText("");
         }
