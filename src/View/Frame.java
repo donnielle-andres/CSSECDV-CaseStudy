@@ -312,6 +312,8 @@ public class Frame extends javax.swing.JFrame {
     public boolean registerAction(String username, String password, String confpass) {
         if (password.equals(confpass)) {
             main.sqlite.addUser(username, password);
+            String formattedDateTime = getTime();
+            main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
             return true;
         } else {
             return false;
@@ -321,15 +323,18 @@ public class Frame extends javax.swing.JFrame {
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator = true){
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-            String formattedDateTime = currentDateTime.format(formatter);
-            System.out.println("Formatted date and time: " + formattedDateTime);
+            String formattedDateTime = getTime();
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }
         return validator;
     }
-
+    
+    public String getTime(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;
     private javax.swing.JPanel Content;
