@@ -322,8 +322,9 @@ public class Frame extends javax.swing.JFrame {
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator = true){
             LocalDateTime currentDateTime = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
             String formattedDateTime = currentDateTime.format(formatter);
+            System.out.println("Formatted date and time: " + formattedDateTime);
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }
         return validator;
