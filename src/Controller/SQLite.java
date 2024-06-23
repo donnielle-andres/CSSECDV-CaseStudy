@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import Model.Passwordhashing;
+import Model.PasswordFunctions;
 import java.sql.PreparedStatement;
 
 public class SQLite {
@@ -182,7 +182,7 @@ public class SQLite {
     }
     
     public void addUser(String username, String password) {
-        String hashedPassword = Passwordhashing.hashPassword(password);
+        String hashedPassword = PasswordFunctions.hashPassword(password);
         String sql = "INSERT INTO users(username,password) VALUES(?,?)";
         try (Connection conn = DriverManager.getConnection(driverURL);
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -230,7 +230,7 @@ public class SQLite {
         }
 
         if (hashedPass != null) {
-            return Passwordhashing.checkPassword(password, hashedPass);
+            return PasswordFunctions.checkPassword(password, hashedPass);
         } else {
             return false;
         }
@@ -344,7 +344,7 @@ public class SQLite {
     
     
     public void addUser(String username, String password, int role) {
-        String hashedPassword = Passwordhashing.hashPassword(password);
+        String hashedPassword = PasswordFunctions.hashPassword(password);
         String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + hashedPassword + "','" + role + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);

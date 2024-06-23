@@ -1,6 +1,6 @@
 
 package View;
-
+import Model.*;
 import javax.swing.JOptionPane;
 
 public class Register extends javax.swing.JPanel {
@@ -99,24 +99,36 @@ public class Register extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        char[] passwordArray = passwordFld.getPassword();
-        String actualPassword = new String(passwordArray);
-        char[] confpasswordArray = confpassFld.getPassword();
-        String actualConfPassword = new String(confpasswordArray);
-        boolean registerSuccessful = frame.registerAction(usernameFld.getText(), actualPassword, actualConfPassword);
-        if (registerSuccessful) {    
-            JOptionPane.showMessageDialog(frame, "Registration Successful! You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
-            frame.loginNav();
-            usernameFld.setText("");
-            passwordFld.setText("");
-            confpassFld.setText("");
+        String username = usernameFld.getText();
+        String password = passwordFld.getText();
+        String confirmPassword = confpassFld.getText();
+
+        // Validate the password
+        if (PasswordFunctions.validatePassword(password, username)) {
+
+            boolean registerSuccessful = frame.registerAction(username, password, confirmPassword);
+            if (registerSuccessful) {
+                JOptionPane.showMessageDialog(frame, "Registration Successful You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
+                frame.loginNav(); // Navigate to login page after successful registration
+                
+                // Clear fields
+                usernameFld.setText("");
+                passwordFld.setText("");
+                confpassFld.setText("");
+                
+            } else {
+                JOptionPane.showMessageDialog(frame, "Registration failed. Please check your username and password.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+                // Clear password fields
+                usernameFld.setText("");
+                passwordFld.setText("");
+                confpassFld.setText("");
+            }
         } else {
-            JOptionPane.showMessageDialog(frame, "Registration failed. Please check your username and password.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Password does not meet the criteria.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            // Clear password fields on validation failure
             passwordFld.setText("");
             confpassFld.setText("");
-            frame.registerNav();
         }
-        frame.loginNav();
     }//GEN-LAST:event_registerBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
