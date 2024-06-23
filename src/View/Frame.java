@@ -319,6 +319,18 @@ public class Frame extends javax.swing.JFrame {
             return false;
         }
     }
+
+    
+    public boolean checkExistingUser(String username){
+        // Check if the username already exists in the database
+        User existingUser = main.sqlite.getUserInfo(username);
+        if (existingUser != null) {
+            return true; // Username exists
+            
+        }else{
+            return false; // user does not exists
+        }
+    }
     
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);

@@ -382,4 +382,5 @@ public class SQLite {
         }
         return product;
     }
+    
 }

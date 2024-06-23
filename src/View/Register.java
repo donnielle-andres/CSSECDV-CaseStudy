@@ -103,11 +103,15 @@ public class Register extends javax.swing.JPanel {
         String password = passwordFld.getText();
         String confirmPassword = confpassFld.getText();
 
-        // Validate the password
-        if (PasswordFunctions.validatePassword(password, username) && UsernameFunctions.validateUsername(username)) {
-
-            boolean registerSuccessful = frame.registerAction(username, password, confirmPassword);
-            if (registerSuccessful) {
+        // VALIDATE INPUTS
+        if(PasswordFunctions.validatePassword(password, username) && UsernameFunctions.validateUsername(username)){
+            
+            // CHECK EXISTING USER
+            boolean existingUser = frame.checkExistingUser(username);
+            
+            if (existingUser == false){
+                // NEW USER
+                frame.registerAction(username, password, confirmPassword);
                 JOptionPane.showMessageDialog(frame, "Registration Successful You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
                 frame.loginNav(); // Navigate to login page after successful registration
                 
@@ -115,11 +119,16 @@ public class Register extends javax.swing.JPanel {
                 usernameFld.setText("");
                 passwordFld.setText("");
                 confpassFld.setText("");
-                
-           
+
+            }else{
+                JOptionPane.showMessageDialog(frame, "Username already exists.", "Registration Error", JOptionPane.ERROR_MESSAGE);
+                 usernameFld.setText("");
+                 passwordFld.setText("");
+                 confpassFld.setText("");
             }
             
-        } else {
+        // INVALID INPUTS ERROR MESSAGE
+        }else{
             JOptionPane.showMessageDialog(frame, "Username and Password does not meet the criteria.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             // Clear password fields on validation failure
             usernameFld.setText("");
