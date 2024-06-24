@@ -26,11 +26,21 @@ public class ClientHome extends javax.swing.JPanel {
     public MgmtProduct mgmtProduct;
     public MgmtUser mgmtUser;
     
+    private User currentUser;
+    
     private CardLayout contentView = new CardLayout();
     
-    public ClientHome() {
+    public ClientHome(User currentUser) {
+        this.currentUser = currentUser;
+        if (currentUser!= null) {
+            System.out.println("ClientHome initialized with user: " + currentUser.getUsername());
+        } else {
+            System.out.println("ClientHome initialized with null user");
+        }
         initComponents();
     }
+    
+
     
     public void init(SQLite sqlite){
         mgmtHistory = new MgmtHistory(sqlite);
@@ -189,6 +199,7 @@ public class ClientHome extends javax.swing.JPanel {
         historyBtn.setForeground(Color.black);
         logsBtn.setForeground(Color.red);
         contentView.show(Content, "mgmtLogs");
+        
     }//GEN-LAST:event_logsBtnActionPerformed
     
     

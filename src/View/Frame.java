@@ -14,10 +14,8 @@ import java.text.*;
 
 public class Frame extends javax.swing.JFrame {
     
-    //Global 
-    public User currentUser = null;
-    public boolean activeUser = false;
-    public SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private User currentUser = new User(null, null);
+    private boolean activeUser = false;
   
     public Frame() {
         initComponents();
@@ -224,7 +222,7 @@ public class Frame extends javax.swing.JFrame {
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
     private StaffHome staffHomePnl = new StaffHome();
-    private ClientHome clientHomePnl = new ClientHome();
+    private ClientHome clientHomePnl = new ClientHome(currentUser);
     
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
@@ -303,6 +301,8 @@ public class Frame extends javax.swing.JFrame {
         case 2: //client
             clientBtn.setVisible(true);
             clientBtn.setEnabled(true);
+            clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
+            clientHomePnl.init(main.sqlite); // Initialize ClientHome with the current user
             clientHomePnl.showPnl("home");
             contentView.show(Content, "clientHomePnl");
             break;
