@@ -25,7 +25,7 @@ public class Main {
         sqlite = new SQLite();
 
 //        // Create a database
-//        sqlite.createNewDatabase();
+        sqlite.createNewDatabase();
 //        
 //        // Drop users table if needed
 //        sqlite.dropHistoryTable();
@@ -34,10 +34,10 @@ public class Main {
 //        sqlite.dropUserTable();
 //        
 //        // Create users table if not exist
-//        sqlite.createHistoryTable();
-//        sqlite.createLogsTable();
-//        sqlite.createProductTable();
-//        sqlite.createUserTable();
+        sqlite.createHistoryTable();
+        sqlite.createLogsTable();
+        sqlite.createProductTable();
+        sqlite.createUserTable();
 //        
 //        // Add sample history
 //        sqlite.addHistory("admin", "Antivirus", 1, "2019-04-03 14:30:00.000");
@@ -91,14 +91,14 @@ public class Main {
 //            System.out.println(" Price: " + products.get(nCtr).getPrice());
 //        }
 //        // Get users
-//        ArrayList<User> users = sqlite.getUsers();
-//        for(int nCtr = 0; nCtr < users.size(); nCtr++){
-//            System.out.println("===== User " + users.get(nCtr).getId() + " =====");
-//            System.out.println(" Username: " + users.get(nCtr).getUsername());
-//            System.out.println(" Password: " + users.get(nCtr).getPassword());
-//            System.out.println(" Role: " + users.get(nCtr).getRole());
-//            System.out.println(" Locked: " + users.get(nCtr).getLocked());
-//        }
+        ArrayList<User> users = sqlite.getUsers();
+        for(int nCtr = 0; nCtr < users.size(); nCtr++){
+           System.out.println("===== User " + users.get(nCtr).getId() + " =====");
+            System.out.println(" Username: " + users.get(nCtr).getUsername());
+           System.out.println(" Password: " + users.get(nCtr).getPassword());
+           System.out.println(" Role: " + users.get(nCtr).getRole());
+            System.out.println(" Locked: " + users.get(nCtr).getLocked());
+       }
         
         // Initialize User Interface
         Frame frame = new Frame();

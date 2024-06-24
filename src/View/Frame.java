@@ -1,10 +1,15 @@
 package View;
 
+//import Controller.IdleLogoutTimer;
 import Controller.Main;
+import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Frame extends javax.swing.JFrame {
 
@@ -244,8 +249,56 @@ public class Frame extends javax.swing.JFrame {
         this.setVisible(true);
     }
     
-    public void mainNav(){
+    public void hideAllButtons(){
+        adminBtn.setVisible(false);
+        managerBtn.setVisible(false);
+        staffBtn.setVisible(false);
+        clientBtn.setVisible(false);
+        adminBtn.setEnabled(false);
+        managerBtn.setEnabled(false);
+        staffBtn.setEnabled(false);
+        clientBtn.setEnabled(false);
+    }
+    
+    public void mainNav(String Username){
         frameView.show(Container, "homePnl");
+        hideAllButtons();
+        System.out.println(Username);
+        User activeUser = main.sqlite.getUserInfo(Username);
+        int activeUserRole = activeUser.getRole();
+        switch (activeUserRole){
+        case 5: //admin
+            adminBtn.setVisible(true);
+            adminBtn.setEnabled(true);
+            adminHomePnl.showPnl("home");
+            contentView.show(Content, "adminHomePnl");
+            
+            break;
+        case 4: //manager
+            managerBtn.setVisible(true);
+            managerBtn.setEnabled(true);
+            managerHomePnl.showPnl("home");
+            contentView.show(Content, "managerHomePnl");
+            break;
+        case 3: //staff
+            staffBtn.setVisible(true);
+            staffBtn.setEnabled(true);
+            staffHomePnl.showPnl("home");
+            contentView.show(Content, "staffHomePnl");
+            break;
+        case 2: //client
+            clientBtn.setVisible(true);
+            clientBtn.setEnabled(true);
+            clientHomePnl.showPnl("home");
+            contentView.show(Content, "clientHomePnl");
+            break;
+        default: // ???
+            JOptionPane.showMessageDialog(Container, "A fatal error occured. Please login again", "Unknown Error", JOptionPane.ERROR_MESSAGE);
+            frameView.show(Container, "loginPnl");
+            break;
+        }
+        
+        
     }
     
     public void loginNav(){
@@ -256,10 +309,44 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "registerPnl");
     }
     
-    public void registerAction(String username, String password, String confpass){
-        main.sqlite.addUser(username, password);
+    public boolean registerAction(String username, String password, String confpass) {
+        if (password.equals(confpass)) {
+            main.sqlite.addUser(username, password);
+            String formattedDateTime = getTime();
+            main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    
+    public boolean checkExistingUser(String username){
+        // Check if the username already exists in the database
+        User existingUser = main.sqlite.getUserInfo(username);
+        if (existingUser != null) {
+            return true; // Username exists
+            
+        }else{
+            return false; // user does not exists
+        }
+    }
+    
+    public boolean loginAction(String username, String password){
+        boolean validator = main.sqlite.validateUser(username, password);
+        if (validator = true){
+            String formattedDateTime = getTime();
+            main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
+        }
+        return validator;
+    }
+    
+    public String getTime(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;
     private javax.swing.JPanel Content;

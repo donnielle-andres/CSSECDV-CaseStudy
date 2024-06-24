@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import Model.PasswordFunctions;
+import java.sql.PreparedStatement;
 
 public class SQLite {
     
@@ -180,11 +182,17 @@ public class SQLite {
     }
     
     public void addUser(String username, String password) {
-        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
-        
+        String hashedPassword = PasswordFunctions.hashPassword(password);
+        String sql = "INSERT INTO users(username,password) VALUES(?,?)";
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword);
+            pstmt.executeUpdate();
+//        String sql = "INSERT INTO users(username, password) VALUES('" + username + "', '" + hashedPassword + "');";
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//            Statement stmt = conn.createStatement()){
+//            stmt.execute(sql);
             
 //      PREPARED STATEMENT EXAMPLE
 //      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
@@ -197,6 +205,36 @@ public class SQLite {
         }
     }
     
+    public boolean validateUser(String username, String password) {
+        String sql = "SELECT password FROM users WHERE username = ?";
+        String hashedPass = null;
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Set the value for the username parameter
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    hashedPass = rs.getString("password");
+                } else {
+                    System.out.println("Username or Password is incorrect");
+                    return false;
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("Error retrieving user: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+
+        if (hashedPass != null) {
+            return PasswordFunctions.checkPassword(password, hashedPass);
+        } else {
+            return false;
+        }
+    }
     
     public ArrayList<History> getHistory(){
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
@@ -279,8 +317,35 @@ public class SQLite {
         return users;
     }
     
+    public User getUserInfo(String username) {
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username='" + username + "';";
+        User activeUser = null;
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)){
+                if (rs.next()) {
+                    activeUser = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked")
+                    );
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace(); 
+        }
+
+        return activeUser;
+    }
+
+    
+    
     public void addUser(String username, String password, int role) {
-        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + password + "','" + role + "')";
+        String hashedPassword = PasswordFunctions.hashPassword(password);
+        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + hashedPassword + "','" + role + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
@@ -317,4 +382,5 @@ public class SQLite {
         }
         return product;
     }
+    
 }
