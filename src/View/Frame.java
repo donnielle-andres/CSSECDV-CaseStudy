@@ -228,7 +228,7 @@ public class Frame extends javax.swing.JFrame {
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
-        
+        //Swapped to initialize only if someone logged in already to get user session
         //adminHomePnl.init(main.sqlite, activeUser);
         //clientHomePnl.init(main.sqlite, activeUser);
         //managerHomePnl.init(main.sqlite, activeUser);
@@ -241,6 +241,7 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "loginPnl");
         
         Content.setLayout(contentView);
+        //Swapped to initialize only if someone logged in already to get user session
         //Content.add(adminHomePnl, "adminHomePnl");
         //Content.add(managerHomePnl, "managerHomePnl");
         //Content.add(staffHomePnl, "staffHomePnl");

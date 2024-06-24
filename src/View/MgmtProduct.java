@@ -31,7 +31,16 @@ public class MgmtProduct extends javax.swing.JPanel {
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
-
+        
+        if (currentUser.getRole()==2){ //Client can only buy stuff
+            addBtn.setVisible(false);
+            editBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+        }
+        else if(currentUser.getRole()==3){ //Staff can add and edit, but not buy
+            purchaseBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+        }
 //        UNCOMMENT TO DISABLE BUTTONS
 //        purchaseBtn.setVisible(false);
 //        addBtn.setVisible(false);
@@ -205,7 +214,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
-
+//NOT IMPLEMENTED YET
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         JTextField nameFld = new JTextField();
         JTextField stockFld = new JTextField();
@@ -227,7 +236,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(priceFld.getText());
         }
     }//GEN-LAST:event_addBtnActionPerformed
-
+//NOT IMPLEMENTED YET
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if(table.getSelectedRow() >= 0){
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
@@ -251,7 +260,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
-
+//NOT IMPLEMENTED YET
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         if(table.getSelectedRow() >= 0){
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
