@@ -49,7 +49,7 @@ public class MgmtUser extends javax.swing.JPanel {
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
             tableModel.addRow(new Object[]{
                 users.get(nCtr).getUsername(), 
-                users.get(nCtr).getPassword(), 
+                users.get(nCtr).getPassword(), //TODO: Hide Password hashes from everyone, basically
                 users.get(nCtr).getRole(), 
                 users.get(nCtr).getLocked()});
         }
@@ -109,7 +109,6 @@ public class MgmtUser extends javax.swing.JPanel {
             table.getColumnModel().getColumn(3).setPreferredWidth(100);
         }
 
-        editRoleBtn.setBackground(new java.awt.Color(255, 255, 255));
         editRoleBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         editRoleBtn.setText("EDIT ROLE");
         editRoleBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +117,6 @@ public class MgmtUser extends javax.swing.JPanel {
             }
         });
 
-        deleteBtn.setBackground(new java.awt.Color(255, 255, 255));
         deleteBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         deleteBtn.setText("DELETE");
         deleteBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -127,7 +125,6 @@ public class MgmtUser extends javax.swing.JPanel {
             }
         });
 
-        lockBtn.setBackground(new java.awt.Color(255, 255, 255));
         lockBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lockBtn.setText("LOCK/UNLOCK");
         lockBtn.setToolTipText("");
@@ -137,7 +134,6 @@ public class MgmtUser extends javax.swing.JPanel {
             }
         });
 
-        chgpassBtn.setBackground(new java.awt.Color(255, 255, 255));
         chgpassBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         chgpassBtn.setText("CHANGE PASS");
         chgpassBtn.addActionListener(new java.awt.event.ActionListener() {
