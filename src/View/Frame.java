@@ -212,6 +212,7 @@ public class Frame extends javax.swing.JFrame {
         String formattedDateTime = getTime();
         main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
         System.out.println("Just Logged Out: " + currentUser.getUsername());
+        currentUser = null;
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed
 
