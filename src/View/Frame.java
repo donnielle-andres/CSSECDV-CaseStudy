@@ -8,14 +8,16 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.time.format.*;
+import java.text.*;
 
 public class Frame extends javax.swing.JFrame {
     
     //Global 
-    public User currentUser;
+    public User currentUser = null;
     public boolean activeUser = false;
+    public SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
   
     public Frame() {
         initComponents();
@@ -312,16 +314,16 @@ public class Frame extends javax.swing.JFrame {
         
     }
     
-    public void loginNav(){
-        System.out.println("LogInNav: " + currentUser.getUsername());
-        if(currentUser != null){
+    public void loginNav() {
+        // System.out.println("Login Nav: " + currentUser.getUsername());
+        if (currentUser!= null) {
             String formattedDateTime = getTime();
-            main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
-            currentUser = null;
+            main.sqlite.addLogs("LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+            currentUser = null; // Explicitly set currentUser to null upon logout
         }
-        frameView.show(Container, "loginPnl");
-        
+        frameView.show(Container, "loginPnl"); // Ensure the login panel is shown
     }
+
     
     public void registerNav(){
         frameView.show(Container, "registerPnl");
