@@ -393,6 +393,42 @@ public class SQLite {
         }
     }
     
+    public void deleteProduct(String name) {
+        String sql = "DELETE FROM product WHERE name = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+            System.out.println("Product '" + name + "' deleted successfully.");
+        } catch (Exception ex) {
+            System.out.println("Error deleting product: " + ex.getMessage());
+        }
+    }
+    
+    public void editProduct(String name, String newName, int stock, double price) {
+        String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newName);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            pstmt.setString(4, name);
+            int rowsUpdated = pstmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Product '" + name + "' updated successfully to '" + newName + "'.");
+            } else {
+                System.out.println("Product '" + name + "' not found.");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error updating product: " + ex.getMessage());
+        }
+    }
+
+        
+
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
         Product product = null;
