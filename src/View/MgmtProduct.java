@@ -7,6 +7,9 @@ package View;
 
 import Controller.SQLite;
 import Model.Product;
+import Model.User;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,9 +24,10 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
-    public MgmtProduct(SQLite sqlite) {
+    User currentUser;
+    public MgmtProduct(SQLite sqlite, User activeUser) {
         initComponents();
+        currentUser=activeUser;
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
@@ -186,6 +190,18 @@ public class MgmtProduct extends javax.swing.JPanel {
 
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println(stockFld.getText());
+                int stockBought = Integer.parseInt(stockFld.getText());
+                String productBought = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+                boolean purchaseSuccessfull = sqlite.buyProduct(productBought, stockBought);
+                if(purchaseSuccessfull){
+                    sqlite.addHistory(currentUser.getUsername(), productBought, stockBought, getTime());
+                    JOptionPane.showMessageDialog(this, "Product bought successfully!", "Purchase Successfull", JOptionPane.OK_OPTION);
+                    
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Not enough stock! Please select a lower value.", "Purchase Failed", JOptionPane.ERROR_MESSAGE);
+                }
+                
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
@@ -246,7 +262,12 @@ public class MgmtProduct extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
-
+    public String getTime(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton deleteBtn;

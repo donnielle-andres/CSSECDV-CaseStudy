@@ -35,7 +35,7 @@ public class ClientHome extends javax.swing.JPanel {
     public void init(SQLite sqlite, User activeUser){
         mgmtHistory = new MgmtHistory(sqlite, activeUser);
         mgmtLogs = new MgmtLogs(sqlite);
-        mgmtProduct = new MgmtProduct(sqlite);
+        mgmtProduct = new MgmtProduct(sqlite, activeUser);
         mgmtUser = new MgmtUser(sqlite);
     
         Content.setLayout(contentView);

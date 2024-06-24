@@ -408,4 +408,34 @@ public class SQLite {
         return product;
     }
     
+    public boolean buyProduct(String name, int quantity) {
+        String selectSql = "SELECT stock FROM product WHERE name=?";
+        String updateSql = "UPDATE product SET stock=? WHERE name=?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+             PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+            selectStmt.setString(1, name);
+            try (ResultSet rs = selectStmt.executeQuery()) {
+                if (rs.next()) {
+                    int currentStock = rs.getInt("stock");
+                    if (currentStock >= quantity) {
+                        int newStock = currentStock - quantity;
+                        updateStmt.setInt(1, newStock);
+                        updateStmt.setString(2, name);
+                        updateStmt.executeUpdate();
+                        return true; 
+                    } else {
+                        System.out.println("Not enough stock available.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Product not found.");
+                    return false; 
+                }
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+            return false; 
+        }
+    }
 }
