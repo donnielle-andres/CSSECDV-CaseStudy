@@ -24,3 +24,4 @@ hs_err_pid*
 replay_pid*
 !/jBCrypt-0.4.3.jar
 !/sqlite-jdbc-3.23.1.jar
+nbproject/private/private.xml
