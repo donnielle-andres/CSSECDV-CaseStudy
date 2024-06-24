@@ -257,6 +257,31 @@ public class SQLite {
         return histories;
     }
     
+        public ArrayList<History> getUserHistory(String user) {
+        String sql = "SELECT id, username, name, stock, timestamp FROM history WHERE username = ?";
+        ArrayList<History> histories = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            // Set the value for the username parameter
+            pstmt.setString(1, user);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    histories.add(new History(rs.getInt("id"),
+                                              rs.getString("username"),
+                                              rs.getString("name"),
+                                              rs.getInt("stock"),
+                                              rs.getString("timestamp")));
+                }
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+        return histories;
+    }
+    
     public ArrayList<Logs> getLogs(){
         String sql = "SELECT id, event, username, desc, timestamp FROM logs";
         ArrayList<Logs> logs = new ArrayList<Logs>();

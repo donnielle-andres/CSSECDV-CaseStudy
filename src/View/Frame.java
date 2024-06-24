@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Frame extends javax.swing.JFrame {
-
+    User activeUser;
     public Frame() {
         initComponents();
     }
@@ -229,10 +229,10 @@ public class Frame extends javax.swing.JFrame {
         loginPnl.frame = this;
         registerPnl.frame = this;
         
-        adminHomePnl.init(main.sqlite);
-        clientHomePnl.init(main.sqlite);
-        managerHomePnl.init(main.sqlite);
-        staffHomePnl.init(main.sqlite);
+        //adminHomePnl.init(main.sqlite, activeUser);
+        //clientHomePnl.init(main.sqlite, activeUser);
+        //managerHomePnl.init(main.sqlite, activeUser);
+        //staffHomePnl.init(main.sqlite, activeUser);
         
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
@@ -241,10 +241,10 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "loginPnl");
         
         Content.setLayout(contentView);
-        Content.add(adminHomePnl, "adminHomePnl");
-        Content.add(managerHomePnl, "managerHomePnl");
-        Content.add(staffHomePnl, "staffHomePnl");
-        Content.add(clientHomePnl, "clientHomePnl");
+        //Content.add(adminHomePnl, "adminHomePnl");
+        //Content.add(managerHomePnl, "managerHomePnl");
+        //Content.add(staffHomePnl, "staffHomePnl");
+        //Content.add(clientHomePnl, "clientHomePnl");
         
         this.setVisible(true);
     }
@@ -260,16 +260,17 @@ public class Frame extends javax.swing.JFrame {
         clientBtn.setEnabled(false);
     }
     
-    public void mainNav(String Username){
+    public void mainNav(){
         frameView.show(Container, "homePnl");
         hideAllButtons();
-        System.out.println(Username);
-        User activeUser = main.sqlite.getUserInfo(Username);
+        System.out.println(activeUser.getUsername());
         int activeUserRole = activeUser.getRole();
         switch (activeUserRole){
         case 5: //admin
             adminBtn.setVisible(true);
             adminBtn.setEnabled(true);
+            adminHomePnl.init(main.sqlite, activeUser);
+            Content.add(adminHomePnl, "adminHomePnl");
             adminHomePnl.showPnl("home");
             contentView.show(Content, "adminHomePnl");
             
@@ -277,20 +278,27 @@ public class Frame extends javax.swing.JFrame {
         case 4: //manager
             managerBtn.setVisible(true);
             managerBtn.setEnabled(true);
+            managerHomePnl.init(main.sqlite, activeUser);
+            Content.add(managerHomePnl, "managerHomePnl");
             managerHomePnl.showPnl("home");
             contentView.show(Content, "managerHomePnl");
             break;
         case 3: //staff
             staffBtn.setVisible(true);
             staffBtn.setEnabled(true);
+            staffHomePnl.init(main.sqlite, activeUser);
+            Content.add(staffHomePnl, "staffHomePnl");
             staffHomePnl.showPnl("home");
             contentView.show(Content, "staffHomePnl");
             break;
         case 2: //client
             clientBtn.setVisible(true);
             clientBtn.setEnabled(true);
-            clientHomePnl.showPnl("home");
+            clientHomePnl.init(main.sqlite, activeUser);
             contentView.show(Content, "clientHomePnl");
+            Content.add(clientHomePnl, "clientHomePnl");
+            clientHomePnl.showPnl("home");
+
             break;
         default: // ???
             JOptionPane.showMessageDialog(Container, "A fatal error occured. Please login again", "Unknown Error", JOptionPane.ERROR_MESSAGE);
@@ -335,6 +343,7 @@ public class Frame extends javax.swing.JFrame {
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator = true){
+            activeUser = main.sqlite.getUserInfo(username);
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }

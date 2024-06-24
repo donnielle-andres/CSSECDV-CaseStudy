@@ -96,12 +96,15 @@ public class Login extends javax.swing.JPanel {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         char[] passwordArray = passwordFld.getPassword();
         String actualPassword = new String(passwordArray);
-        boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
-        if (loginSuccessful) {
-            
-            frame.mainNav(usernameFld.getText());
-            usernameFld.setText("");
-            passwordFld.setText("");
+        
+        if (!usernameFld.getText().isEmpty() && !actualPassword.isEmpty()) {
+            boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
+            if(loginSuccessful){
+                frame.mainNav();
+                usernameFld.setText("");
+                passwordFld.setText("");
+            }
+
         } else {
             JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
             passwordFld.setText("");
