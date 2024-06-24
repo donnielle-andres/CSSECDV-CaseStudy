@@ -1,8 +1,8 @@
 package View;
 
 //import Controller.IdleLogoutTimer;
-import Controller.Main;
-import Model.User;
+import Controller.*;
+import Model.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -12,7 +12,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Frame extends javax.swing.JFrame {
-
+    
+    //Global 
+    public User currentUser;
+    public boolean activeUser = false;
+  
     public Frame() {
         initComponents();
     }
@@ -205,13 +209,16 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        String formattedDateTime = getTime();
+        main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+        System.out.println("Just Logged Out: " + currentUser.getUsername());
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
-    
+
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
     private StaffHome staffHomePnl = new StaffHome();
@@ -247,6 +254,8 @@ public class Frame extends javax.swing.JFrame {
         Content.add(clientHomePnl, "clientHomePnl");
         
         this.setVisible(true);
+        
+        
     }
     
     public void hideAllButtons(){
@@ -260,13 +269,16 @@ public class Frame extends javax.swing.JFrame {
         clientBtn.setEnabled(false);
     }
     
-    public void mainNav(String Username){
+    public void mainNav(final String Username){
         frameView.show(Container, "homePnl");
         hideAllButtons();
-        System.out.println(Username);
-        User activeUser = main.sqlite.getUserInfo(Username);
-        int activeUserRole = activeUser.getRole();
-        switch (activeUserRole){
+        
+        activeUser = true;
+        currentUser = main.sqlite.getUserInfo(Username);
+        System.out.println("Currently Logged In: " + currentUser.getUsername());
+        
+        int currentUserRole = currentUser.getRole();
+        switch (currentUserRole){
         case 5: //admin
             adminBtn.setVisible(true);
             adminBtn.setEnabled(true);
@@ -298,11 +310,17 @@ public class Frame extends javax.swing.JFrame {
             break;
         }
         
-        
     }
     
     public void loginNav(){
+        System.out.println("LogInNav: " + currentUser.getUsername());
+        if(currentUser != null){
+            String formattedDateTime = getTime();
+            main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+            currentUser = null;
+        }
         frameView.show(Container, "loginPnl");
+        
     }
     
     public void registerNav(){
@@ -334,7 +352,7 @@ public class Frame extends javax.swing.JFrame {
     
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
-        if (validator = true){
+        if (validator == true){
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }
