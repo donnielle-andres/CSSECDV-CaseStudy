@@ -94,17 +94,15 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        char[] passwordArray = passwordFld.getPassword();
-        String actualPassword = new String(passwordArray);
+        String actualPassword = String.valueOf(passwordFld.getPassword());
         boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
         if (loginSuccessful) {
-            
             frame.mainNav(usernameFld.getText());
-            usernameFld.setText("");
-            passwordFld.setText("");
+            clearInputs();
+            
         } else {
             JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            passwordFld.setText("");
+            clearInputs();
         }
 
     }//GEN-LAST:event_loginBtnActionPerformed
@@ -122,6 +120,11 @@ public class Login extends javax.swing.JPanel {
         
     }//GEN-LAST:event_passwordFldActionPerformed
 
+    
+    private void clearInputs(){
+        usernameFld.setText("");
+        passwordFld.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

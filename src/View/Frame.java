@@ -330,9 +330,9 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "registerPnl");
     }
     
-    public boolean registerAction(String username, String password, String confpass) {
+    public boolean registerAction(String username, String password, String confpass, String mfa1, String mfa2) {
         if (password.equals(confpass)) {
-            main.sqlite.addUser(username, password);
+            main.sqlite.addUser(username, password, mfa1, mfa2);
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
             return true;

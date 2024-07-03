@@ -91,13 +91,16 @@ public class Main {
 //            System.out.println(" Price: " + products.get(nCtr).getPrice());
 //        }
 //        // Get users
+        //System.out.println(" printing users ");
         ArrayList<User> users = sqlite.getUsers();
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
-           System.out.println("===== User " + users.get(nCtr).getId() + " =====");
+            System.out.println("===== User " + users.get(nCtr).getId() + " =====");
             System.out.println(" Username: " + users.get(nCtr).getUsername());
-           System.out.println(" Password: " + users.get(nCtr).getPassword());
-           System.out.println(" Role: " + users.get(nCtr).getRole());
+            System.out.println(" Password: " + users.get(nCtr).getPassword());
+            System.out.println(" Role: " + users.get(nCtr).getRole());
             System.out.println(" Locked: " + users.get(nCtr).getLocked());
+            System.out.println(" MFA1: " + users.get(nCtr).getmfa1());
+            System.out.println(" MFA2: " + users.get(nCtr).getmfa2());
        }
         
         // Initialize User Interface
