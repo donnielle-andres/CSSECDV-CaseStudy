@@ -5,7 +5,7 @@
 package Model;
 import java.util.regex.*;
 
-public class UsernameFunctions {
+public class UserFunctions {
     
     public static boolean validateUsername(String username) {
 

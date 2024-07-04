@@ -142,7 +142,7 @@ public class Register extends javax.swing.JPanel {
         }
 
         // VALIDATE USERNAME
-        boolean isValidUsername = UsernameFunctions.validateUsername(username);
+        boolean isValidUsername = UserFunctions.validateUsername(username);
         boolean isNewUser = !frame.checkExistingUser(username);
 
         if (!isValidUsername || !isNewUser) {

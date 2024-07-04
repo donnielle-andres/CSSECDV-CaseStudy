@@ -219,6 +219,8 @@ public class Frame extends javax.swing.JFrame {
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
+    public ForgotPassword forgotPassPnl = new ForgotPassword();
+    public ChangePassword changePassPnl = new ChangePassword();
 
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
@@ -236,6 +238,8 @@ public class Frame extends javax.swing.JFrame {
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
+        forgotPassPnl.frame = this;
+        changePassPnl.frame = this;
         
         adminHomePnl.init(main.sqlite);
         clientHomePnl.init(main.sqlite);
@@ -245,6 +249,8 @@ public class Frame extends javax.swing.JFrame {
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
         Container.add(registerPnl, "registerPnl");
+        Container.add(forgotPassPnl, "forgotPassPnl");
+        Container.add(changePassPnl, "changePassPnl");
         Container.add(HomePnl, "homePnl");
         frameView.show(Container, "loginPnl");
         
@@ -330,6 +336,14 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "registerPnl");
     }
     
+    public void forgotPassNav(){
+        frameView.show(Container, "forgotPassPnl");
+    }
+    
+    public void changePassNav(){
+        frameView.show(Container, "changePassPnl");
+    }
+    
     public boolean registerAction(String username, String password, String confpass, String mfa1, String mfa2) {
         if (password.equals(confpass)) {
             main.sqlite.addUser(username, password, mfa1, mfa2);
@@ -337,6 +351,14 @@ public class Frame extends javax.swing.JFrame {
             main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
             return true;
         } else {
+            return false;
+        }
+    }
+    
+    public boolean confirmUser(String username, String mfa1, String mfa2){
+        if (main.sqlite.confirmUserForgot(username, mfa1, mfa2)){
+            return true;
+        }else {
             return false;
         }
     }
