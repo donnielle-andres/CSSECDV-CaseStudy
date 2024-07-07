@@ -9,13 +9,13 @@ import java.util.regex.*;
 
 public class PasswordFunctions {
     // PASSWORD HASHING
-    public static String hashPassword(String plainPassword) {
+    public static String hashInput(String plainInput) {
         String salt = BCrypt.gensalt();
-        return BCrypt.hashpw(plainPassword, salt);
+        return BCrypt.hashpw(plainInput, salt);
     }
 
-    public static boolean checkPassword(String plainPassword, String hashedPassword) {
-        return BCrypt.checkpw(plainPassword, hashedPassword);
+    public static boolean checkHashed(String plainInput, String hashedInput) {
+        return BCrypt.checkpw(plainInput, hashedInput);
     }
     
 

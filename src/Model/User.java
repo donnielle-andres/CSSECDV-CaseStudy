@@ -6,18 +6,22 @@ public class User {
     private String password;
     private int role = 2;
     private int locked = 0;
+    private String mfa1;
+    private String mfa2;
 
     public User(String username, String password){
         this.username = username;
         this.password = password;
     }
     
-    public User(int id, String username, String password, int role, int locked){
+    public User(int id, String username, String password, int role, int locked, String mfa1, String mfa2){
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
         this.locked = locked;
+        this.mfa1 = mfa1;
+        this.mfa2 = mfa2;
     }
     
     public int getId() {
@@ -58,5 +62,21 @@ public class User {
 
     public void setLocked(int locked) {
         this.locked = locked;
+    }
+    
+    public String getmfa1() {
+        return mfa1;
+    }
+
+    public void setmfa1(String mfa1) {
+        this.mfa1 = mfa1;
+    }
+    
+    public String getmfa2() {
+        return mfa2;
+    }
+
+    public void setmfa2(String mfa2) {
+        this.mfa2 = mfa2;
     }
 }
