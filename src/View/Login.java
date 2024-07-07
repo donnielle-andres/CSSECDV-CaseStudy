@@ -109,12 +109,17 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        String actualPassword = String.valueOf(passwordFld.getText());
-        boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
-        if (loginSuccessful) {
-            frame.mainNav(usernameFld.getText());
-            clearInputs();
-            
+        char[] passwordArray = passwordFld.getPassword();
+        String actualPassword = new String(passwordArray);
+        
+        if (!usernameFld.getText().isEmpty() && !actualPassword.isEmpty()) {
+            boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
+            if(loginSuccessful){
+                frame.mainNav(usernameFld.getText());
+                usernameFld.setText("");
+                passwordFld.setText("");
+            }
+
         } else {
             JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
             clearInputs();
@@ -148,7 +153,7 @@ public class Login extends javax.swing.JPanel {
     private javax.swing.JButton forgotPassBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginBtn;
-    private javax.swing.JTextField passwordFld;
+    private javax.swing.JPasswordField passwordFld;
     private javax.swing.JButton registerBtn;
     private javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables

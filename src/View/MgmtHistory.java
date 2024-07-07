@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
+import Model.User;
 /**
  *
  * @author beepxD
@@ -21,8 +21,10 @@ public class MgmtHistory extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
-    public MgmtHistory(SQLite sqlite) {
+    User currentUser;
+    public MgmtHistory(SQLite sqlite, User activeUser) {
+        currentUser = activeUser;
+//        System.out.println("currentUserMgmH" + currentUser.getUsername());
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
@@ -44,20 +46,38 @@ public class MgmtHistory extends javax.swing.JPanel {
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
-        
-//      LOAD CONTENTS
-        ArrayList<History> history = sqlite.getHistory();
-        for(int nCtr = 0; nCtr < history.size(); nCtr++){
-            Product product = sqlite.getProduct(history.get(nCtr).getName());
-            tableModel.addRow(new Object[]{
-                history.get(nCtr).getUsername(), 
-                history.get(nCtr).getName(), 
-                history.get(nCtr).getStock(), 
-                product.getPrice(), 
-                product.getPrice() * history.get(nCtr).getStock(), 
-                history.get(nCtr).getTimestamp()
-            });
+        System.out.println("currentUser" + currentUser.getUsername());
+        int currentUserRole = currentUser.getRole();
+        if(currentUserRole == 2){
+            ArrayList<History> history = sqlite.getUserHistory(currentUser.getUsername());
+            for(int nCtr = 0; nCtr < history.size(); nCtr++){
+                Product product = sqlite.getProduct(history.get(nCtr).getName());
+                tableModel.addRow(new Object[]{
+                    history.get(nCtr).getUsername(), 
+                    history.get(nCtr).getName(), 
+                    history.get(nCtr).getStock(), 
+                    product.getPrice(), 
+                    product.getPrice() * history.get(nCtr).getStock(), 
+                    history.get(nCtr).getTimestamp()
+                });
+            }
         }
+        else{
+           //      LOAD CONTENTS
+            ArrayList<History> history = sqlite.getHistory();
+            for(int nCtr = 0; nCtr < history.size(); nCtr++){
+                Product product = sqlite.getProduct(history.get(nCtr).getName());
+                tableModel.addRow(new Object[]{
+                    history.get(nCtr).getUsername(), 
+                    history.get(nCtr).getName(), 
+                    history.get(nCtr).getStock(), 
+                    product.getPrice(), 
+                    product.getPrice() * history.get(nCtr).getStock(), 
+                    history.get(nCtr).getTimestamp()
+                });
+            } 
+        }
+
     }
     
     public void designer(JTextField component, String text){

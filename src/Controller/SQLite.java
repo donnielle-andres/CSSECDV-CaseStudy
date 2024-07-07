@@ -285,6 +285,31 @@ public class SQLite {
         return histories;
     }
     
+        public ArrayList<History> getUserHistory(String user) {
+        String sql = "SELECT id, username, name, stock, timestamp FROM history WHERE username = ?";
+        ArrayList<History> histories = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            // Set the value for the username parameter
+            pstmt.setString(1, user);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    histories.add(new History(rs.getInt("id"),
+                                              rs.getString("username"),
+                                              rs.getString("name"),
+                                              rs.getInt("stock"),
+                                              rs.getString("timestamp")));
+                }
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+        return histories;
+    }
+    
     public ArrayList<Logs> getLogs(){
         String sql = "SELECT id, event, username, desc, timestamp FROM logs";
         ArrayList<Logs> logs = new ArrayList<Logs>();
@@ -386,7 +411,7 @@ public class SQLite {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setInt(3, role);
+            pstmt.setInt(3, 5);
             pstmt.setString(4, hashedmfa1);
             pstmt.setString(5, hashedmfa2);
             pstmt.executeUpdate();
@@ -427,6 +452,42 @@ public class SQLite {
         }
     }
     
+    public void deleteProduct(String name) {
+        String sql = "DELETE FROM product WHERE name = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+            System.out.println("Product '" + name + "' deleted successfully.");
+        } catch (Exception ex) {
+            System.out.println("Error deleting product: " + ex.getMessage());
+        }
+    }
+    
+    public void editProduct(String name, String newName, int stock, double price) {
+        String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newName);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            pstmt.setString(4, name);
+            int rowsUpdated = pstmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Product '" + name + "' updated successfully to '" + newName + "'.");
+            } else {
+                System.out.println("Product '" + name + "' not found.");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error updating product: " + ex.getMessage());
+        }
+    }
+
+        
+
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
         Product product = null;
@@ -442,4 +503,34 @@ public class SQLite {
         return product;
     }
     
+    public boolean buyProduct(String name, int quantity) {
+        String selectSql = "SELECT stock FROM product WHERE name=?";
+        String updateSql = "UPDATE product SET stock=? WHERE name=?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+             PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+            selectStmt.setString(1, name);
+            try (ResultSet rs = selectStmt.executeQuery()) {
+                if (rs.next()) {
+                    int currentStock = rs.getInt("stock");
+                    if (currentStock >= quantity) {
+                        int newStock = currentStock - quantity;
+                        updateStmt.setInt(1, newStock);
+                        updateStmt.setString(2, name);
+                        updateStmt.executeUpdate();
+                        return true; 
+                    } else {
+                        System.out.println("Not enough stock available.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Product not found.");
+                    return false; 
+                }
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+            return false; 
+        }
+    }
 }

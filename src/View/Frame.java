@@ -12,8 +12,7 @@ import java.time.*;
 import java.time.format.*;
 import java.text.*;
 
-public class Frame extends javax.swing.JFrame {
-    
+public class Frame extends javax.swing.JFrame {   
     private User currentUser = new User(null, null);
     private boolean activeUser = false;
   
@@ -241,10 +240,10 @@ public class Frame extends javax.swing.JFrame {
         forgotPassPnl.frame = this;
         changePassPnl.frame = this;
         
-        adminHomePnl.init(main.sqlite);
-        clientHomePnl.init(main.sqlite);
-        managerHomePnl.init(main.sqlite);
-        staffHomePnl.init(main.sqlite);
+        //adminHomePnl.init(main.sqlite);
+        //clientHomePnl.init(main.sqlite);
+        //managerHomePnl.init(main.sqlite);
+        //staffHomePnl.init(main.sqlite);
         
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
@@ -255,10 +254,11 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "loginPnl");
         
         Content.setLayout(contentView);
-        Content.add(adminHomePnl, "adminHomePnl");
-        Content.add(managerHomePnl, "managerHomePnl");
-        Content.add(staffHomePnl, "staffHomePnl");
-        Content.add(clientHomePnl, "clientHomePnl");
+        //Swapped to initialize only if someone logged in already to get user session
+        //Content.add(adminHomePnl, "adminHomePnl");
+        //Content.add(managerHomePnl, "managerHomePnl");
+        //Content.add(staffHomePnl, "staffHomePnl");
+        //Content.add(clientHomePnl, "clientHomePnl");
         
         this.setVisible(true);
         
@@ -289,6 +289,8 @@ public class Frame extends javax.swing.JFrame {
         case 5: //admin
             adminBtn.setVisible(true);
             adminBtn.setEnabled(true);
+            adminHomePnl.init(main.sqlite, currentUser);
+            Content.add(adminHomePnl, "adminHomePnl");
             adminHomePnl.showPnl("home");
             contentView.show(Content, "adminHomePnl");
             
@@ -296,12 +298,17 @@ public class Frame extends javax.swing.JFrame {
         case 4: //manager
             managerBtn.setVisible(true);
             managerBtn.setEnabled(true);
+            managerHomePnl.init(main.sqlite, currentUser);
+            Content.add(managerHomePnl, "managerHomePnl");
             managerHomePnl.showPnl("home");
             contentView.show(Content, "managerHomePnl");
             break;
         case 3: //staff
             staffBtn.setVisible(true);
             staffBtn.setEnabled(true);
+                        clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
+            staffHomePnl.init(main.sqlite, currentUser);
+            Content.add(staffHomePnl, "staffHomePnl");
             staffHomePnl.showPnl("home");
             contentView.show(Content, "staffHomePnl");
             break;
@@ -309,9 +316,12 @@ public class Frame extends javax.swing.JFrame {
             clientBtn.setVisible(true);
             clientBtn.setEnabled(true);
             clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
-            clientHomePnl.init(main.sqlite); // Initialize ClientHome with the current user
-            clientHomePnl.showPnl("home");
+            clientHomePnl.init(main.sqlite, currentUser); // Initialize ClientHome with the current user
+            clientHomePnl.init(main.sqlite, currentUser);
             contentView.show(Content, "clientHomePnl");
+            Content.add(clientHomePnl, "clientHomePnl");
+            clientHomePnl.showPnl("home");
+
             break;
         default: // ???
             JOptionPane.showMessageDialog(Container, "A fatal error occured. Please login again", "Unknown Error", JOptionPane.ERROR_MESSAGE);
@@ -378,6 +388,7 @@ public class Frame extends javax.swing.JFrame {
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator == true){
+            currentUser = main.sqlite.getUserInfo(username);
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }
