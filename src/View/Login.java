@@ -115,7 +115,7 @@ public class Login extends javax.swing.JPanel {
         if (!usernameFld.getText().isEmpty() && !actualPassword.isEmpty()) {
             boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
             if(loginSuccessful){
-                frame.mainNav();
+                frame.mainNav(usernameFld.getText());
                 usernameFld.setText("");
                 passwordFld.setText("");
             }
@@ -153,7 +153,7 @@ public class Login extends javax.swing.JPanel {
     private javax.swing.JButton forgotPassBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginBtn;
-    private javax.swing.JTextField passwordFld;
+    private javax.swing.JPasswordField passwordFld;
     private javax.swing.JButton registerBtn;
     private javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables
