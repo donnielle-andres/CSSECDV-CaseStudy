@@ -1,18 +1,22 @@
 package View;
 
 //import Controller.IdleLogoutTimer;
-import Controller.Main;
-import Model.User;
+import Controller.*;
+import Model.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.time.format.*;
+import java.text.*;
 
 public class Frame extends javax.swing.JFrame {
-    User activeUser;
+    User activeUser;    
+    private User currentUser = new User(null, null);
+    private boolean activeUser = false;
+  
     public Frame() {
         initComponents();
     }
@@ -205,17 +209,23 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        String formattedDateTime = getTime();
+        main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+        System.out.println("Just Logged Out: " + currentUser.getUsername());
+        currentUser = null;
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
-    
+    public ForgotPassword forgotPassPnl = new ForgotPassword();
+    public ChangePassword changePassPnl = new ChangePassword();
+
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
     private StaffHome staffHomePnl = new StaffHome();
-    private ClientHome clientHomePnl = new ClientHome();
+    private ClientHome clientHomePnl = new ClientHome(currentUser);
     
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
@@ -228,15 +238,19 @@ public class Frame extends javax.swing.JFrame {
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
-        //Swapped to initialize only if someone logged in already to get user session
-        //adminHomePnl.init(main.sqlite, activeUser);
-        //clientHomePnl.init(main.sqlite, activeUser);
-        //managerHomePnl.init(main.sqlite, activeUser);
-        //staffHomePnl.init(main.sqlite, activeUser);
+        forgotPassPnl.frame = this;
+        changePassPnl.frame = this;
+        
+        adminHomePnl.init(main.sqlite);
+        clientHomePnl.init(main.sqlite);
+        managerHomePnl.init(main.sqlite);
+        staffHomePnl.init(main.sqlite);
         
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
         Container.add(registerPnl, "registerPnl");
+        Container.add(forgotPassPnl, "forgotPassPnl");
+        Container.add(changePassPnl, "changePassPnl");
         Container.add(HomePnl, "homePnl");
         frameView.show(Container, "loginPnl");
         
@@ -248,6 +262,8 @@ public class Frame extends javax.swing.JFrame {
         //Content.add(clientHomePnl, "clientHomePnl");
         
         this.setVisible(true);
+        
+        
     }
     
     public void hideAllButtons(){
@@ -261,12 +277,16 @@ public class Frame extends javax.swing.JFrame {
         clientBtn.setEnabled(false);
     }
     
-    public void mainNav(){
+    public void mainNav(final String Username){
         frameView.show(Container, "homePnl");
         hideAllButtons();
-        System.out.println(activeUser.getUsername());
-        int activeUserRole = activeUser.getRole();
-        switch (activeUserRole){
+        
+        activeUser = true;
+        currentUser = main.sqlite.getUserInfo(Username);
+        System.out.println("Currently Logged In: " + currentUser.getUsername());
+        
+        int currentUserRole = currentUser.getRole();
+        switch (currentUserRole){
         case 5: //admin
             adminBtn.setVisible(true);
             adminBtn.setEnabled(true);
@@ -287,6 +307,8 @@ public class Frame extends javax.swing.JFrame {
         case 3: //staff
             staffBtn.setVisible(true);
             staffBtn.setEnabled(true);
+                        clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
+            clientHomePnl.init(main.sqlite);
             staffHomePnl.init(main.sqlite, activeUser);
             Content.add(staffHomePnl, "staffHomePnl");
             staffHomePnl.showPnl("home");
@@ -295,6 +317,8 @@ public class Frame extends javax.swing.JFrame {
         case 2: //client
             clientBtn.setVisible(true);
             clientBtn.setEnabled(true);
+            clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
+            clientHomePnl.init(main.sqlite); // Initialize ClientHome with the current user
             clientHomePnl.init(main.sqlite, activeUser);
             contentView.show(Content, "clientHomePnl");
             Content.add(clientHomePnl, "clientHomePnl");
@@ -307,24 +331,46 @@ public class Frame extends javax.swing.JFrame {
             break;
         }
         
-        
     }
     
-    public void loginNav(){
-        frameView.show(Container, "loginPnl");
+    public void loginNav() {
+        // System.out.println("Login Nav: " + currentUser.getUsername());
+        if (currentUser!= null) {
+            String formattedDateTime = getTime();
+            main.sqlite.addLogs("LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+            currentUser = null; // Explicitly set currentUser to null upon logout
+        }
+        frameView.show(Container, "loginPnl"); // Ensure the login panel is shown
     }
+
     
     public void registerNav(){
         frameView.show(Container, "registerPnl");
     }
     
-    public boolean registerAction(String username, String password, String confpass) {
+    public void forgotPassNav(){
+        frameView.show(Container, "forgotPassPnl");
+    }
+    
+    public void changePassNav(){
+        frameView.show(Container, "changePassPnl");
+    }
+    
+    public boolean registerAction(String username, String password, String confpass, String mfa1, String mfa2) {
         if (password.equals(confpass)) {
-            main.sqlite.addUser(username, password);
+            main.sqlite.addUser(username, password, mfa1, mfa2);
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
             return true;
         } else {
+            return false;
+        }
+    }
+    
+    public boolean confirmUser(String username, String mfa1, String mfa2){
+        if (main.sqlite.confirmUserForgot(username, mfa1, mfa2)){
+            return true;
+        }else {
             return false;
         }
     }
@@ -343,7 +389,7 @@ public class Frame extends javax.swing.JFrame {
     
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
-        if (validator = true){
+        if (validator == true){
             activeUser = main.sqlite.getUserInfo(username);
             String formattedDateTime = getTime();
             main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);

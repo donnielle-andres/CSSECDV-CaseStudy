@@ -83,20 +83,29 @@ public class SQLite {
     }
      
     public void createUserTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (\n"
+        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS users (\n"
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
             + " username TEXT NOT NULL UNIQUE,\n"
             + " password TEXT NOT NULL,\n"
             + " role INTEGER DEFAULT 2,\n"
-            + " locked INTEGER DEFAULT 0\n"
+            + " locked INTEGER DEFAULT 0,\n"
+            + " mfa1 TEXT NOT NULL,\n"
+            + " mfa2 TEXT NOT NULL\n"
             + ");";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sqlCreateTable);
             System.out.println("Table users in database.db created.");
+
+            // Fetch and print the column names
+            String sqlFetchColumns = "PRAGMA table_info(users)";
+            ResultSet rs = stmt.executeQuery(sqlFetchColumns);
+            while (rs.next()) {
+                System.out.println(rs.getString("name")); // Prints the column name
+            }
         } catch (Exception ex) {
-            System.out.print(ex);
+            System.err.println("createUserTable Error: " + ex.getMessage());
         }
     }
     
@@ -181,30 +190,10 @@ public class SQLite {
         }
     }
     
-    public void addUser(String username, String password) {
-        String hashedPassword = PasswordFunctions.hashPassword(password);
-        String sql = "INSERT INTO users(username,password) VALUES(?,?)";
-        try (Connection conn = DriverManager.getConnection(driverURL);
-        PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, hashedPassword);
-            pstmt.executeUpdate();
-//        String sql = "INSERT INTO users(username, password) VALUES('" + username + "', '" + hashedPassword + "');";
-//        try (Connection conn = DriverManager.getConnection(driverURL);
-//            Statement stmt = conn.createStatement()){
-//            stmt.execute(sql);
-            
-//      PREPARED STATEMENT EXAMPLE
-//      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
-//      PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//      pstmt.setString(1, username);
-//      pstmt.setString(2, password);
-//      pstmt.executeUpdate();
-        } catch (Exception ex) {
-            System.out.print(ex);
-        }
-    }
+
     
+    
+    //FOR LOG IN
     public boolean validateUser(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
         String hashedPass = null;
@@ -230,11 +219,50 @@ public class SQLite {
         }
 
         if (hashedPass != null) {
-            return PasswordFunctions.checkPassword(password, hashedPass);
+            return PasswordFunctions.checkHashed(password, hashedPass);
         } else {
             return false;
         }
     }
+    
+    
+    // FOR FORGET PASSWORD
+    public boolean confirmUserForgot(String username, String mfa1, String mfa2) {
+        String sql = "SELECT username, mfa1, mfa2 FROM users WHERE username = ?";
+        String hashedMfa1 = null;
+        String hashedMfa2 = null;
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Set the value for the username parameter
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    hashedMfa1 = rs.getString("mfa1");
+                    hashedMfa2 = rs.getString("mfa2");
+                    
+                } else {
+                    System.out.println("Hashed MFAs are incorrect");
+                    return false;
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("confirmUserForgot - Error retrieving user: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+
+        if (hashedMfa1 != null && PasswordFunctions.checkHashed(mfa1, hashedMfa1) && 
+            hashedMfa2 != null && PasswordFunctions.checkHashed(mfa2, hashedMfa2)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
     
     public ArrayList<History> getHistory(){
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
@@ -324,7 +352,7 @@ public class SQLite {
     }
     
     public ArrayList<User> getUsers(){
-        String sql = "SELECT id, username, password, role, locked FROM users";
+        String sql = "SELECT id, username, password, role, locked, mfa1, mfa2 FROM users";
         ArrayList<User> users = new ArrayList<User>();
         
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -336,14 +364,16 @@ public class SQLite {
                                    rs.getString("username"),
                                    rs.getString("password"),
                                    rs.getInt("role"),
-                                   rs.getInt("locked")));
+                                   rs.getInt("locked"),
+                                   rs.getString("mfa1"),
+                                   rs.getString("mfa2")));
             }
         } catch (Exception ex) {}
         return users;
     }
     
     public User getUserInfo(String username) {
-        String sql = "SELECT id, username, password, role, locked FROM users WHERE username='" + username + "';";
+        String sql = "SELECT id, username, password, role, locked, mfa1, mfa2 FROM users WHERE username='" + username + "';";
         User activeUser = null;
 
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -355,27 +385,56 @@ public class SQLite {
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getInt("role"),
-                        rs.getInt("locked")
+                        rs.getInt("locked"),
+                        rs.getString("mfa1"),
+                        rs.getString("mfa2")
+                            
                     );
 
             }
         } catch (Exception ex) {
-            ex.printStackTrace(); 
+            System.err.println("Get User Info Error: " + ex.getMessage());
         }
 
         return activeUser;
     }
+   
+    
+    public void addUser(String username, String password, int role, String mfa1, String mfa2) {
+        String hashedPassword = PasswordFunctions.hashInput(password);
+        String hashedmfa1 = PasswordFunctions.hashInput(mfa1);
+        String hashedmfa2 = PasswordFunctions.hashInput(mfa2);
 
-    
-    
-    public void addUser(String username, String password, int role) {
-        String hashedPassword = PasswordFunctions.hashPassword(password);
-        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + hashedPassword + "','" + role + "')";
-        
+        String sql = "INSERT INTO users(username,password,role,locked,mfa1,mfa2) VALUES(?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
-            
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword);
+            pstmt.setInt(3, role);
+            pstmt.setString(4, hashedmfa1);
+            pstmt.setString(5, hashedmfa2);
+            pstmt.executeUpdate();
+
+        } catch (Exception ex) {
+            // Log the exception message or stack trace for debugging
+            System.err.println("Add User Error: " + ex.getMessage());
+        }
+    }
+    
+    public void addUser(String username, String password, String mfa1, String mfa2) {
+        String hashedPassword = PasswordFunctions.hashInput(password);
+        String hashedmfa1 = PasswordFunctions.hashInput(mfa1);
+        String hashedmfa2 = PasswordFunctions.hashInput(mfa2);
+        
+        String sql = "INSERT INTO users(username,password,mfa1,mfa2) VALUES(?,?,?,?)";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword);
+            pstmt.setString(3, hashedmfa1);
+            pstmt.setString(4, hashedmfa2);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
