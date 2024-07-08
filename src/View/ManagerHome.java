@@ -36,7 +36,7 @@ public class ManagerHome extends javax.swing.JPanel {
         mgmtHistory = new MgmtHistory(sqlite, activeUser);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtProduct = new MgmtProduct(sqlite, activeUser);
-        mgmtUser = new MgmtUser(sqlite,activeUser);
+        mgmtUser = new MgmtUser(sqlite, activeUser);
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME MANAGER!", new java.awt.Color(153,102,255)), "home");
