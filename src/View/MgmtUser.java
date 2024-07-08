@@ -31,7 +31,18 @@ public class MgmtUser extends javax.swing.JPanel {
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
-        
+        int role = currentUser.getRole();
+        if(role==3){ //staff
+            editRoleBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+            lockBtn.setVisible(false);
+            chgpassBtn.setVisible(false);
+        }
+        else if(role==4){ //manager
+            editRoleBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+            chgpassBtn.setVisible(false);
+        }
 //        UNCOMMENT TO DISABLE BUTTONS
 //        editBtn.setVisible(false);
 //        deleteBtn.setVisible(false);
@@ -50,10 +61,11 @@ public class MgmtUser extends javax.swing.JPanel {
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
             tableModel.addRow(new Object[]{
                 users.get(nCtr).getUsername(), 
-                users.get(nCtr).getPassword(), //TODO: Hide Password hashes from everyone, basically
+                users.get(nCtr).getPassword(),
                 users.get(nCtr).getRole(), 
                 users.get(nCtr).getLocked()});
         }
+        table.removeColumn(table.getColumnModel().getColumn(1));
     }
 
     public void designer(JTextField component, String text){
@@ -177,19 +189,33 @@ public class MgmtUser extends javax.swing.JPanel {
 
     private void editRoleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRoleBtnActionPerformed
         if(table.getSelectedRow() >= 0){
-            String[] options = {"1-DISABLED","2-CLIENT","3-STAFF","4-MANAGER","5-ADMIN"};
-            JComboBox optionList = new JComboBox(options);
-            
+            String[] options = {"1-DISABLED", "2-CLIENT", "3-STAFF", "4-MANAGER", "5-ADMIN"};
+            JComboBox<String> optionList = new JComboBox<>(options);
+
             optionList.setSelectedIndex((int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1);
-            
-            String result = (String) JOptionPane.showInputDialog(null, "USER: " + tableModel.getValueAt(table.getSelectedRow(), 0), 
-                "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]);
-            
+
+            String result = (String) JOptionPane.showInputDialog(null, 
+                "USER: " + tableModel.getValueAt(table.getSelectedRow(), 0), 
+                "EDIT USER ROLE", 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                options, 
+                options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]
+            );
+
             if(result != null){
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
-                System.out.println(result.charAt(0));
+                String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+                int newRole = Integer.parseInt(result.split("-")[0]);
+
+                boolean roleChanged = sqlite.editUserRole(username, newRole);
+                if(roleChanged){
+                    JOptionPane.showMessageDialog(null, "Role updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    tableModel.setValueAt(newRole, table.getSelectedRow(), 2); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to update role", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }
+     }
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
@@ -203,18 +229,28 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void lockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lockBtnActionPerformed
-        if(table.getSelectedRow() >= 0){
-            String state = "lock";
-            if("1".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
-                state = "unlock";
-            }
-            
-            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
-            
-            if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+        if (table.getSelectedRow() >= 0) {
+        String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+        boolean currentlyLocked = "1".equals(tableModel.getValueAt(table.getSelectedRow(), 3).toString());
+        String state = currentlyLocked ? "unlock" : "lock";
+        
+        int result = JOptionPane.showConfirmDialog(null, 
+            "Are you sure you want to " + state + " " + username + "?", 
+            "CONFIRM ACTION", 
+            JOptionPane.YES_NO_OPTION
+        );
+        
+        if (result == JOptionPane.YES_OPTION) {
+            boolean statusChanged = sqlite.setUserLockedStatus(username, !currentlyLocked);
+            if (statusChanged) {
+                JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); // Update table model
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to " + state + " user " + username, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+}
+
     }//GEN-LAST:event_lockBtnActionPerformed
 
     private void chgpassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chgpassBtnActionPerformed

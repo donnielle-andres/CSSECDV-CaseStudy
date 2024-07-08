@@ -119,6 +119,10 @@ public class Login extends javax.swing.JPanel {
                 usernameFld.setText("");
                 passwordFld.setText("");
             }
+            else{
+                JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                clearInputs();
+            }
 
         } else {
             JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);

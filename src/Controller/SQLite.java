@@ -195,8 +195,9 @@ public class SQLite {
     
     //FOR LOG IN
     public boolean validateUser(String username, String password) {
-        String sql = "SELECT password FROM users WHERE username = ?";
+        String sql = "SELECT password, locked FROM users WHERE username = ?";
         String hashedPass = null;
+        boolean isLocked = false;
 
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -207,6 +208,7 @@ public class SQLite {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     hashedPass = rs.getString("password");
+                    isLocked = rs.getBoolean("locked");
                 } else {
                     System.out.println("Username or Password is incorrect");
                     return false;
@@ -218,13 +220,18 @@ public class SQLite {
             return false;
         }
 
+        if (isLocked) {
+            System.out.println("Account is locked");
+            return false;
+        }
+
         if (hashedPass != null) {
             return PasswordFunctions.checkHashed(password, hashedPass);
         } else {
             return false;
         }
     }
-    
+
     
     // FOR FORGET PASSWORD
     public boolean confirmUserForgot(String username, String mfa1, String mfa2) {
@@ -427,12 +434,11 @@ public class SQLite {
         String hashedmfa1 = PasswordFunctions.hashInput(mfa1);
         String hashedmfa2 = PasswordFunctions.hashInput(mfa2);
         
-        String sql = "INSERT INTO users(username,password,role,mfa1,mfa2) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(username,password,mfa1,mfa2) VALUES(?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(driverURL);
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setInt(3, 5);
             pstmt.setString(4, hashedmfa1);
             pstmt.setString(5, hashedmfa2);
             pstmt.executeUpdate();
@@ -561,6 +567,45 @@ public class SQLite {
         }
         return false;
     }
-
-
+    
+    public boolean editUserRole(String username, int newRole) {
+        String sql = "UPDATE users SET role = ? WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, newRole);
+            pstmt.setString(2, username);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Role updated successfully for user: " + username);
+                return true;
+            } else {
+                System.out.println("User not found: " + username);
+                return false;
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+            return false;
+        }
+    }
+    
+    public boolean setUserLockedStatus(String username, boolean locked) {
+        String sql = "UPDATE users SET locked = ? WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, locked);
+            pstmt.setString(2, username);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                String status = locked ? "locked" : "unlocked";
+                System.out.println("User " + username + " has been " + status + " successfully.");
+                return true;
+            } else {
+                System.out.println("User not found: " + username);
+                return false;
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+            return false;
+        }
+    }
 }
