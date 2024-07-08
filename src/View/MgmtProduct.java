@@ -242,7 +242,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(priceFld.getText());
         }
     }//GEN-LAST:event_addBtnActionPerformed
-
+//NOT IMPLEMENTED YET
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if(table.getSelectedRow() >= 0){
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
