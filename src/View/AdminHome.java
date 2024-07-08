@@ -35,7 +35,7 @@ public class AdminHome extends javax.swing.JPanel {
         mgmtHistory = new MgmtHistory(sqlite, activeUser);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtProduct = new MgmtProduct(sqlite, activeUser);
-        mgmtUser = new MgmtUser(sqlite,activeUser);
+        mgmtUser = new MgmtUser(sqlite);
         
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME ADMIN!", new java.awt.Color(51, 153, 255)), "home");

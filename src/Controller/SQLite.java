@@ -411,7 +411,7 @@ public class SQLite {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setInt(3, role);
+            pstmt.setInt(3, 5);
             pstmt.setString(4, hashedmfa1);
             pstmt.setString(5, hashedmfa2);
             pstmt.executeUpdate();
@@ -427,14 +427,13 @@ public class SQLite {
         String hashedmfa1 = PasswordFunctions.hashInput(mfa1);
         String hashedmfa2 = PasswordFunctions.hashInput(mfa2);
         
-        String sql = "INSERT INTO users(username,password,role,mfa1,mfa2) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(username,password,mfa1,mfa2) VALUES(?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(driverURL);
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setInt(3, 5);
-            pstmt.setString(4, hashedmfa1);
-            pstmt.setString(5, hashedmfa2);
+            pstmt.setString(3, hashedmfa1);
+            pstmt.setString(4, hashedmfa2);
             pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
@@ -534,33 +533,4 @@ public class SQLite {
             return false; 
         }
     }
-    
-    public boolean changePassword(String username, String newPassword, String confPass) {
-        if(newPassword.equals(confPass)&&PasswordFunctions.validatePassword(newPassword, username)){
-            String hashedPassword = PasswordFunctions.hashInput(newPassword);
-            String sql = "UPDATE users SET password = ? WHERE username = ?";
-            try (Connection conn = DriverManager.getConnection(driverURL);
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, hashedPassword);
-                pstmt.setString(2, username);
-                int affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    System.out.println("Password updated successfully for user: " + username);
-                    return true;
-                } else {
-                    System.out.println("User not found: " + username);
-                    return true;
-                }
-            } catch (Exception ex) {
-                System.out.print(ex);
-            }
-            
-        }
-        else{
-            return false;
-        }
-        return false;
-    }
-
-
 }
