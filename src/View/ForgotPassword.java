@@ -59,7 +59,7 @@ public class ForgotPassword extends javax.swing.JPanel {
         mfaFld1.setBackground(new java.awt.Color(240, 240, 240));
         mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         mfaFld1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12)));
         mfaFld1.setMinimumSize(new java.awt.Dimension(64, 45));
         mfaFld1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
