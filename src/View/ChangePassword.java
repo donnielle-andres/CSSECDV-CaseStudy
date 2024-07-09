@@ -4,14 +4,31 @@
  */
 package View;
 
+import Model.PasswordFunctions;
+import Model.User;
+import javax.swing.JOptionPane;
+
 
 public class ChangePassword extends javax.swing.JPanel {
 
     public Frame frame;
-    
-    public ChangePassword() {
+    private final User currentUser;
+    private String username;
+   
+    public ChangePassword(final User currentUser) {
+        this.currentUser = currentUser;
+        username = this.currentUser.getUsername();
+        if (username != null) {
+            System.out.println("ChangePassword initialized with user: " + username);
+        } else if (username == null) {
+            System.out.println("ChangePassword initialized with null user");
+        }
         initComponents();
     }
+    
+    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -22,12 +39,16 @@ public class ChangePassword extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        passwordFld = new javax.swing.JTextField();
-        confpassFld = new javax.swing.JTextField();
         changePassBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+        passwordFld = new javax.swing.JPasswordField();
+        confpasswordFld = new javax.swing.JPasswordField();
+        usernameFld = new javax.swing.JTextField();
+
+        jLabel3.setText("jLabel3");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -39,21 +60,6 @@ public class ChangePassword extends javax.swing.JPanel {
         jLabel2.setText("FORGOT PASSWORD");
         jLabel2.setToolTipText("");
         jLabel2.setAlignmentX(0.5F);
-
-        passwordFld.setBackground(new java.awt.Color(240, 240, 240));
-        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER NEW PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        passwordFld.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordFldActionPerformed(evt);
-            }
-        });
-
-        confpassFld.setBackground(new java.awt.Color(240, 240, 240));
-        confpassFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        confpassFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        confpassFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM NEW PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         changePassBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         changePassBtn.setText("CHANGE PASSWORD");
@@ -71,6 +77,21 @@ public class ChangePassword extends javax.swing.JPanel {
             }
         });
 
+        passwordFld.setBackground(new java.awt.Color(242, 242, 242));
+        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER NEW PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+
+        confpasswordFld.setBackground(new java.awt.Color(242, 242, 242));
+        confpasswordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        confpasswordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        confpasswordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM NEW PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+
+        usernameFld.setBackground(new java.awt.Color(242, 242, 242));
+        usernameFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        usernameFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        usernameFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER USERNAME", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,26 +100,26 @@ public class ChangePassword extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(194, 194, 194)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(178, 178, 178))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(backBtn)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
+                        .addGap(265, 265, 265)
+                        .addComponent(changePassBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(258, 258, 258))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(194, 194, 194)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(confpassFld)
-                                    .addComponent(passwordFld))
-                                .addGap(157, 157, 157))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(102, 102, 102)
-                                .addComponent(changePassBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(258, 258, 258))))))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(178, 178, 178))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(usernameFld, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(passwordFld, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(confpasswordFld, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(187, 187, 187))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,22 +131,44 @@ public class ChangePassword extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(passwordFld, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addGap(38, 38, 38)
-                .addComponent(confpassFld, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addGap(61, 61, 61)
+                .addComponent(usernameFld, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(passwordFld, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(confpasswordFld, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addComponent(changePassBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87))
+                .addGap(39, 39, 39))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void changePassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePassBtnActionPerformed
-        // TODO add your handling code here:
+        // ACCESS CURRENT USERNAME FROM FORGOT PASSWORD PANEL - DOES NOT WORK FOR SOME REASON (??)
+        System.out.println("changePassBtnActionPerformed has user: " + currentUser.getUsername());
+        
+        username = usernameFld.getText();
+        String password = new String(passwordFld.getPassword());
+        String confirmPassword = new String(confpasswordFld.getPassword());
+        boolean userExists = frame.checkExistingUser(username);
+        
+         // CHECK COMPLETE INPUTS
+        if (username.equals("") || password.equals("") || confirmPassword.equals("")) {
+            JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Change Password Failed!", JOptionPane.INFORMATION_MESSAGE);
+            clearInputs();
+        }else if (!password.equals(confirmPassword) || !userExists){
+            JOptionPane.showMessageDialog(frame, "Check Username and Password", "Change Password Error", JOptionPane.ERROR_MESSAGE);
+            clearInputs();
+        }else if (!PasswordFunctions.validatePassword(password, username)) {
+            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits and 1 special character", "Change Password Error", JOptionPane.ERROR_MESSAGE);
+            clearInputs();
+        }else{
+            System.out.println("User Changing Password Valid!!!" );
+            frame.changePassword(username, password, confirmPassword);
+            clearInputs();
+            frame.loginNav();
+        }
+       
     }//GEN-LAST:event_changePassBtnActionPerformed
-
-    private void passwordFldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordFldActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         clearInputs();
@@ -133,16 +176,19 @@ public class ChangePassword extends javax.swing.JPanel {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void clearInputs(){
+        usernameFld.setText("");
         passwordFld.setText("");
-        confpassFld.setText("");
+        confpasswordFld.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JButton changePassBtn;
-    private javax.swing.JTextField confpassFld;
+    private javax.swing.JPasswordField confpasswordFld;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField passwordFld;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPasswordField passwordFld;
+    private javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables
 }

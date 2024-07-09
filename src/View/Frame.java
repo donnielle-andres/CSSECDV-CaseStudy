@@ -11,6 +11,7 @@ import javax.swing.WindowConstants;
 import java.time.*;
 import java.time.format.*;
 import java.text.*;
+import javax.swing.JPanel;
 
 public class Frame extends javax.swing.JFrame {   
     private User currentUser = new User(null, null);
@@ -217,7 +218,7 @@ public class Frame extends javax.swing.JFrame {
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
     public ForgotPassword forgotPassPnl = new ForgotPassword();
-    public ChangePassword changePassPnl = new ChangePassword();
+    public ChangePassword changePassPnl = new ChangePassword(currentUser);
 
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
@@ -248,6 +249,7 @@ public class Frame extends javax.swing.JFrame {
         Container.add(registerPnl, "registerPnl");
         Container.add(forgotPassPnl, "forgotPassPnl");
         Container.add(changePassPnl, "changePassPnl");
+         
         Container.add(HomePnl, "homePnl");
         frameView.show(Container, "loginPnl");
         
@@ -330,9 +332,8 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void loginNav() {
-        // System.out.println("Login Nav: " + currentUser.getUsername());
+        System.out.println("Login Nav: " + currentUser.getUsername());
         if (currentUser!= null) {
-
             currentUser = null; // Explicitly set currentUser to null upon logout
         }
         frameView.show(Container, "loginPnl"); // Ensure the login panel is shown
@@ -344,10 +345,15 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void forgotPassNav(){
+        //System.out.println("Frame forgotPassNav: " + currentUser.getUsername());
         frameView.show(Container, "forgotPassPnl");
     }
     
-    public void changePassNav(){
+    public void changePassNav(final String username){
+        activeUser = true;
+        currentUser = main.sqlite.getUserInfo(username); // Fetch the current user's info
+        System.out.println("Frame changePassNav: " + currentUser.getUsername());
+        changePassPnl = new ChangePassword(currentUser); // Now correctly initialized with the current user
         frameView.show(Container, "changePassPnl");
     }
     
@@ -364,6 +370,16 @@ public class Frame extends javax.swing.JFrame {
         if (main.sqlite.confirmUserForgot(username, mfa1, mfa2)){
             return true;
         }else {
+            return false;
+        }
+    }
+
+    public boolean changePassword(String username, String password, String confpassword) {
+        try {
+            main.sqlite.changePassword(username, password, confpassword, "2");
+            return true;
+        } catch (Exception e) {
+            System.err.println("An error occurred while changing the password: " + e.getMessage());
             return false;
         }
     }

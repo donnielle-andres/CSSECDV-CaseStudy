@@ -16,13 +16,13 @@ public class Register extends javax.swing.JPanel {
     private void initComponents() {
 
         registerBtn = new javax.swing.JButton();
-        passwordFld = new javax.swing.JPasswordField();
         usernameFld = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        confpassFld = new javax.swing.JPasswordField();
         backBtn = new javax.swing.JButton();
         mfaFld1 = new javax.swing.JTextField();
         mfaFld2 = new javax.swing.JTextField();
+        passwordFld = new javax.swing.JPasswordField();
+        confirmpasswordFld = new javax.swing.JPasswordField();
 
         registerBtn.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         registerBtn.setText("REGISTER");
@@ -31,11 +31,6 @@ public class Register extends javax.swing.JPanel {
                 registerBtnActionPerformed(evt);
             }
         });
-
-        passwordFld.setBackground(new java.awt.Color(240, 240, 240));
-        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         usernameFld.setBackground(new java.awt.Color(240, 240, 240));
         usernameFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -46,11 +41,6 @@ public class Register extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SECURITY Svcs");
         jLabel1.setToolTipText("");
-
-        confpassFld.setBackground(new java.awt.Color(240, 240, 240));
-        confpassFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        confpassFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        confpassFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         backBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         backBtn.setText("<Back");
@@ -63,7 +53,7 @@ public class Register extends javax.swing.JPanel {
         mfaFld1.setBackground(new java.awt.Color(240, 240, 240));
         mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         mfaFld1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12)));
+        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         mfaFld1.setMinimumSize(new java.awt.Dimension(64, 45));
         mfaFld1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +72,16 @@ public class Register extends javax.swing.JPanel {
             }
         });
 
+        passwordFld.setBackground(new java.awt.Color(240, 240, 240));
+        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+
+        confirmpasswordFld.setBackground(new java.awt.Color(240, 240, 240));
+        confirmpasswordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        confirmpasswordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        confirmpasswordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,13 +91,13 @@ public class Register extends javax.swing.JPanel {
                 .addComponent(backBtn)
                 .addGap(122, 122, 122)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mfaFld1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(confirmpasswordFld)
+                    .addComponent(passwordFld)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(mfaFld2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(mfaFld1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(usernameFld, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(passwordFld)
-                    .addComponent(confpassFld))
+                    .addComponent(registerBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(200, 200, 200))
         );
         layout.setVerticalGroup(
@@ -112,17 +112,17 @@ public class Register extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(31, 31, 31)
                 .addComponent(usernameFld, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordFld, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(confpassFld, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(passwordFld, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(confirmpasswordFld, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(mfaFld1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(mfaFld2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addComponent(registerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         mfaFld2.getAccessibleContext().setAccessibleName("");
@@ -130,47 +130,40 @@ public class Register extends javax.swing.JPanel {
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         String username = usernameFld.getText();
-        char[] passwordArray = passwordFld.getPassword();
-        String password = new String(passwordArray);
-        char[] confpassArray = passwordFld.getPassword();
-        String confirmPassword = new String(confpassArray);
+        String password = new String(passwordFld.getPassword());
+        String confirmPassword = new String(confirmpasswordFld.getPassword());
         String mfaInput1 = mfaFld1.getText();
         String mfaInput2 = mfaFld2.getText();
-
-        // CHECK COMPLETE INPUTS
-        if (username.equals("") || password.equals("") || confirmPassword.equals("") || mfaInput1.equals("") || mfaInput2.equals("")) {
-            JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Registration Failed!", JOptionPane.INFORMATION_MESSAGE);
-            clearInputs();
-        }
-
+        
         // VALIDATE USERNAME
         boolean isValidUsername = UserFunctions.validateUsername(username);
         boolean isNewUser = !frame.checkExistingUser(username);
 
-        if (!isValidUsername || !isNewUser) {
-            if (!isNewUser) {
-                JOptionPane.showMessageDialog(frame, "Username already exists.", "Registration Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(frame, "Invalid username format.", "Registration Error", JOptionPane.ERROR_MESSAGE);
-            }
-            clearInputs();
-            return;
+        // CHECK COMPLETE INPUTS
+        if (username.equals("") || password.equals("") || confirmPassword.equals("") || mfaInput1.equals("") || mfaInput2.equals("")) {
+            JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Registration Failed!", JOptionPane.INFORMATION_MESSAGE);
         }
-
+        // VALIDATE USERNAME
+        else if (!isValidUsername) {
+            JOptionPane.showMessageDialog(frame, "Username must consists of atleast 8 characters and 2 digits", "Registration Error", JOptionPane.ERROR_MESSAGE);
+        }
         // VALIDATE PASSWORD
-        if (!PasswordFunctions.validatePassword(password, username)) {
+        else if (!PasswordFunctions.validatePassword(password, username)) {
             JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits and 1 special character", "Registration Error", JOptionPane.ERROR_MESSAGE);
-            clearInputs();
-            return;
+        } 
+        else if (!isNewUser || !password.equals(confirmPassword)){
+            JOptionPane.showMessageDialog(frame, "Check username and password", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
+        else {
+            // All validations passed, proceed with registration
+            frame.registerAction(username, password, confirmPassword, mfaInput1, mfaInput2);
+            JOptionPane.showMessageDialog(frame, "Registration Successful. You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
+            frame.loginNav(); 
 
-        // All validations passed, proceed with registration
-        frame.registerAction(username, password, confirmPassword, mfaInput1, mfaInput2);
-        JOptionPane.showMessageDialog(frame, "Registration Successful. You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
-        frame.loginNav(); 
-
+        }
         // Clear fields
         clearInputs();
+        
     }//GEN-LAST:event_registerBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
@@ -189,7 +182,7 @@ public class Register extends javax.swing.JPanel {
     private void clearInputs(){
         usernameFld.setText("");
         passwordFld.setText("");
-        confpassFld.setText("");
+        confirmpasswordFld.setText("");
         mfaFld1.setText("");
         mfaFld2.setText("");
     }
@@ -197,7 +190,7 @@ public class Register extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JPasswordField confpassFld;
+    private javax.swing.JPasswordField confirmpasswordFld;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField mfaFld1;
     private javax.swing.JTextField mfaFld2;

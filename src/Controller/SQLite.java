@@ -558,6 +558,7 @@ public class SQLite {
         }
     }
     
+    
     public boolean changePassword(String username, String newPassword, String confPass, String userActor) {
         if(newPassword.equals(confPass)&&PasswordFunctions.validatePassword(newPassword, username)){
             String hashedPassword = PasswordFunctions.hashInput(newPassword);
@@ -585,6 +586,7 @@ public class SQLite {
         }
         return false;
     }
+    
     
     public boolean editUserRole(String username, int newRole, String userActor) {
         String sql = "UPDATE users SET role = ? WHERE username = ?";

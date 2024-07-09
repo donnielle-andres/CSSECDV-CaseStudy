@@ -52,14 +52,14 @@ public class ForgotPassword extends javax.swing.JPanel {
         jLabel2.setAlignmentX(0.5F);
 
         usernameFld.setBackground(new java.awt.Color(240, 240, 240));
-        usernameFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        usernameFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         usernameFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         usernameFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "USERNAME", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         mfaFld1.setBackground(new java.awt.Color(240, 240, 240));
-        mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         mfaFld1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12)));
+        mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         mfaFld1.setMinimumSize(new java.awt.Dimension(64, 45));
         mfaFld1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,7 +68,7 @@ public class ForgotPassword extends javax.swing.JPanel {
         });
 
         mfaFld2.setBackground(new java.awt.Color(240, 240, 240));
-        mfaFld2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        mfaFld2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         mfaFld2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mfaFld2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT COLOR IS YOUR EYE?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         mfaFld2.setPreferredSize(new java.awt.Dimension(64, 46));
@@ -94,26 +94,27 @@ public class ForgotPassword extends javax.swing.JPanel {
                 .addGap(82, 82, 82)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(84, 84, 84))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(195, 195, 195)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(206, 206, 206))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(backBtn))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(backBtn)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(162, 162, 162)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mfaFld1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(mfaFld2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(usernameFld))))
-                .addGap(175, 175, 175))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(195, 195, 195)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(206, 206, 206))
+                .addGap(162, 162, 162))
             .addGroup(layout.createSequentialGroup()
-                .addGap(213, 213, 213)
+                .addGap(198, 198, 198)
                 .addComponent(confirmUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(214, 214, 214))
+                .addGap(229, 229, 229))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,9 +131,9 @@ public class ForgotPassword extends javax.swing.JPanel {
                 .addComponent(mfaFld1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(mfaFld2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(confirmUserBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -153,20 +154,19 @@ public class ForgotPassword extends javax.swing.JPanel {
         String username = usernameFld.getText();
         String mfaInput1 = mfaFld1.getText();
         String mfaInput2 = mfaFld2.getText();
+        boolean confirmSuccess = frame.confirmUser(username, mfaInput1, mfaInput2);
+        
         
         // CHECK COMPLETE INPUTS
         if (username.equals("") || mfaInput1.equals("") || mfaInput2.equals("")) {
             JOptionPane.showMessageDialog(frame, "Must complete all fields!", "User Confirmation Failed!", JOptionPane.INFORMATION_MESSAGE);
             clearInputs();
         }
-        
-        boolean confirmSuccess = frame.confirmUser(username, mfaInput1, mfaInput2);
-        
-        if (confirmSuccess){
-            frame.changePassNav();
+        else if (confirmSuccess){   
+            frame.changePassNav(username);
             clearInputs();
         }else{
-            JOptionPane.showMessageDialog(frame, "Confirmation Failed! Please check your username and MFA Answers", "User Confirmation Failed!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Confirmation Failed! Please check your username and MFA Answers", "User Confirmation Failed!", JOptionPane.ERROR_MESSAGE);
             clearInputs();
         }
            
