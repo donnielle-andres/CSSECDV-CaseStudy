@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import Model.PasswordFunctions;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SQLite {
     
@@ -439,21 +441,22 @@ public class SQLite {
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setString(4, hashedmfa1);
-            pstmt.setString(5, hashedmfa2);
+            pstmt.setString(3, hashedmfa1);
+            pstmt.setString(4, hashedmfa2);
             pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
     
-    public void removeUser(String username) {
+    public void removeUser(String username, String userActor) {
         String sql = "DELETE FROM users WHERE username='" + username + "';";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("User " + username + " has been deleted.");
+            String formattedDateTime = getTime();
+            addLogs("DELETE", userActor, userActor + " has deleted "+username, formattedDateTime);
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -541,7 +544,7 @@ public class SQLite {
         }
     }
     
-    public boolean changePassword(String username, String newPassword, String confPass) {
+    public boolean changePassword(String username, String newPassword, String confPass, String userActor) {
         if(newPassword.equals(confPass)&&PasswordFunctions.validatePassword(newPassword, username)){
             String hashedPassword = PasswordFunctions.hashInput(newPassword);
             String sql = "UPDATE users SET password = ? WHERE username = ?";
@@ -551,7 +554,8 @@ public class SQLite {
                 pstmt.setString(2, username);
                 int affectedRows = pstmt.executeUpdate();
                 if (affectedRows > 0) {
-                    System.out.println("Password updated successfully for user: " + username);
+                    String formattedDateTime = getTime();
+                    addLogs("PASSCHG", userActor,userActor + " has changed the password of "+username, formattedDateTime);
                     return true;
                 } else {
                     System.out.println("User not found: " + username);
@@ -568,7 +572,7 @@ public class SQLite {
         return false;
     }
     
-    public boolean editUserRole(String username, int newRole) {
+    public boolean editUserRole(String username, int newRole, String userActor) {
         String sql = "UPDATE users SET role = ? WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -576,6 +580,8 @@ public class SQLite {
             pstmt.setString(2, username);
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
+                String formattedDateTime = getTime();
+                addLogs("ROLECHG", userActor, userActor + " changed the role of "+ username +" to " + newRole , formattedDateTime);
                 System.out.println("Role updated successfully for user: " + username);
                 return true;
             } else {
@@ -588,7 +594,7 @@ public class SQLite {
         }
     }
     
-    public boolean setUserLockedStatus(String username, boolean locked) {
+    public boolean setUserLockedStatus(String username, boolean locked, String userActor) {
         String sql = "UPDATE users SET locked = ? WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -597,7 +603,8 @@ public class SQLite {
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 String status = locked ? "locked" : "unlocked";
-                System.out.println("User " + username + " has been " + status + " successfully.");
+                String formattedDateTime = getTime();
+                addLogs("LOCKCHG", userActor, userActor + " has set "+username+" to status: "+ status, formattedDateTime);
                 return true;
             } else {
                 System.out.println("User not found: " + username);
@@ -607,5 +614,12 @@ public class SQLite {
             System.out.print(ex);
             return false;
         }
+    }
+    
+    public String getTime(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
     }
 }
