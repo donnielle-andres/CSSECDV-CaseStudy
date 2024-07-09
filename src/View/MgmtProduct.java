@@ -234,8 +234,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             String name = nameFld.getText();
             int stock = Integer.parseInt(stockFld.getText());
             double price = Double.parseDouble(priceFld.getText());
-            sqlite.addProduct(name, stock, price);
-            sqlite.addLogs( "ADDPD", currentUser.getUsername(), name + " was added with qty "+stock+" and price "+price, getTime());
+            sqlite.addProduct(name, stock, price, currentUser.getUsername());
             JOptionPane.showMessageDialog(this, "Product added successfully!", "Product Addition Successfull", JOptionPane.OK_OPTION);
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
@@ -263,9 +262,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                    String newName = nameFld.getText();
                    int newStock = Integer.parseInt(stockFld.getText());
                    double newPrice = Double.parseDouble(priceFld.getText());
-                   sqlite.editProduct(currentName, newName, newStock, newPrice);
-                   JOptionPane.showMessageDialog(this, "Product edited successfully!", "Product Edited Successfully", JOptionPane.OK_OPTION);
-                   sqlite.addLogs("EDTPD", currentUser.getUsername(), currentName + " (Product) was edited.", getTime());
+                   sqlite.editProduct(currentName, newName, newStock, newPrice, currentUser.getUsername());
                    System.out.println(newName);
                    System.out.println(newStock);
                    System.out.println(newPrice);
@@ -279,8 +276,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             
             if (result == JOptionPane.YES_OPTION) {
                 String productDeleted = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
-                sqlite.deleteProduct(productDeleted);
-                sqlite.addLogs( "DELPD", currentUser.getUsername(), productDeleted + " (Product) was deleted.", getTime());
+                sqlite.deleteProduct(productDeleted, currentUser.getUsername());
                 JOptionPane.showMessageDialog(this, "Product deleted successfully!", "Product Deletion Successfull", JOptionPane.OK_OPTION);
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
             }
