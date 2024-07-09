@@ -7,6 +7,8 @@ package View;
 
 import Controller.SQLite;
 import Model.User;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -209,6 +211,8 @@ public class MgmtUser extends javax.swing.JPanel {
 
                 boolean roleChanged = sqlite.editUserRole(username, newRole);
                 if(roleChanged){
+                    String formattedDateTime = getTime();
+                    sqlite.addLogs("ROLECHG", currentUser.getUsername(), currentUser.getUsername() + " changed the role of "+ username +" to " + newRole , formattedDateTime);
                     JOptionPane.showMessageDialog(null, "Role updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                     tableModel.setValueAt(newRole, table.getSelectedRow(), 2); 
                 } else {
@@ -219,11 +223,17 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        if(table.getSelectedRow() >= 0){
-            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
-            
+        if (table.getSelectedRow() >= 0) {
+            String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + username + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
+
             if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                // Call the removeUser method to delete the user
+                sqlite.removeUser(username);
+                String formattedDateTime = getTime();
+                sqlite.addLogs("DELETE", currentUser.getUsername(), currentUser.getUsername() + " has deleted "+username, formattedDateTime);
+                tableModel.removeRow(table.getSelectedRow());
+                System.out.println("User " + username + " has been deleted.");
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
@@ -243,8 +253,10 @@ public class MgmtUser extends javax.swing.JPanel {
         if (result == JOptionPane.YES_OPTION) {
             boolean statusChanged = sqlite.setUserLockedStatus(username, !currentlyLocked);
             if (statusChanged) {
+                String formattedDateTime = getTime();
+                sqlite.addLogs("LOCKCHG", currentUser.getUsername(), currentUser.getUsername() + " has set "+username+" to status: "+ !currentlyLocked, formattedDateTime);
                 JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); // Update table model
+                tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to " + state + " user " + username, "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -272,7 +284,12 @@ public class MgmtUser extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_chgpassBtnActionPerformed
-
+    public String getTime(){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedDateTime = currentDateTime.format(formatter);
+        return formattedDateTime;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chgpassBtn;
