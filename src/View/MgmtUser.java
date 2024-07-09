@@ -54,8 +54,9 @@ public class MgmtUser extends javax.swing.JPanel {
     
     public void init(){
         //      CLEAR TABLE
-        for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
-            tableModel.removeRow(0);
+        int rowCount = tableModel.getRowCount();
+        for(int nCtr = rowCount - 1; nCtr >= 0; nCtr--){
+            tableModel.removeRow(nCtr);
         }
         
 //      LOAD CONTENTS
@@ -67,7 +68,10 @@ public class MgmtUser extends javax.swing.JPanel {
                 users.get(nCtr).getRole(), 
                 users.get(nCtr).getLocked()});
         }
-        table.removeColumn(table.getColumnModel().getColumn(1));
+        if(table.getColumnCount()==4){
+            table.removeColumn(table.getColumnModel().getColumn(1));
+        }
+        
     }
 
     public void designer(JTextField component, String text){
