@@ -208,9 +208,7 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
-        String formattedDateTime = getTime();
-        main.sqlite.addLogs( "LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
-        System.out.println("Just Logged Out: " + currentUser.getUsername());
+        main.sqlite.logOut(currentUser.getUsername());
         currentUser = null;
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed
@@ -334,8 +332,7 @@ public class Frame extends javax.swing.JFrame {
     public void loginNav() {
         // System.out.println("Login Nav: " + currentUser.getUsername());
         if (currentUser!= null) {
-            String formattedDateTime = getTime();
-            main.sqlite.addLogs("LOGOUT", currentUser.getUsername(), currentUser.getUsername() + " has logged out", formattedDateTime);
+
             currentUser = null; // Explicitly set currentUser to null upon logout
         }
         frameView.show(Container, "loginPnl"); // Ensure the login panel is shown
@@ -357,8 +354,6 @@ public class Frame extends javax.swing.JFrame {
     public boolean registerAction(String username, String password, String confpass, String mfa1, String mfa2) {
         if (password.equals(confpass)) {
             main.sqlite.addUser(username, password, mfa1, mfa2);
-            String formattedDateTime = getTime();
-            main.sqlite.addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
             return true;
         } else {
             return false;
@@ -389,17 +384,8 @@ public class Frame extends javax.swing.JFrame {
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator == true){
             currentUser = main.sqlite.getUserInfo(username);
-            String formattedDateTime = getTime();
-            main.sqlite.addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
         }
         return validator;
-    }
-    
-    public String getTime(){
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        String formattedDateTime = currentDateTime.format(formatter);
-        return formattedDateTime;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;
