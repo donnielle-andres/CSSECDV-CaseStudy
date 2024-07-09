@@ -213,10 +213,8 @@ public class MgmtUser extends javax.swing.JPanel {
                 String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
                 int newRole = Integer.parseInt(result.split("-")[0]);
 
-                boolean roleChanged = sqlite.editUserRole(username, newRole);
+                boolean roleChanged = sqlite.editUserRole(username, newRole, currentUser.getUsername());
                 if(roleChanged){
-                    String formattedDateTime = getTime();
-                    sqlite.addLogs("ROLECHG", currentUser.getUsername(), currentUser.getUsername() + " changed the role of "+ username +" to " + newRole , formattedDateTime);
                     JOptionPane.showMessageDialog(null, "Role updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                     tableModel.setValueAt(newRole, table.getSelectedRow(), 2); 
                 } else {
@@ -232,12 +230,8 @@ public class MgmtUser extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + username + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
-                // Call the removeUser method to delete the user
-                sqlite.removeUser(username);
-                String formattedDateTime = getTime();
-                sqlite.addLogs("DELETE", currentUser.getUsername(), currentUser.getUsername() + " has deleted "+username, formattedDateTime);
+                sqlite.removeUser(username, currentUser.getUsername());
                 tableModel.removeRow(table.getSelectedRow());
-                System.out.println("User " + username + " has been deleted.");
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
@@ -255,10 +249,8 @@ public class MgmtUser extends javax.swing.JPanel {
         );
         
         if (result == JOptionPane.YES_OPTION) {
-            boolean statusChanged = sqlite.setUserLockedStatus(username, !currentlyLocked);
+            boolean statusChanged = sqlite.setUserLockedStatus(username, !currentlyLocked,currentUser.getUsername());
             if (statusChanged) {
-                String formattedDateTime = getTime();
-                sqlite.addLogs("LOCKCHG", currentUser.getUsername(), currentUser.getUsername() + " has set "+username+" to status: "+ !currentlyLocked, formattedDateTime);
                 JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
             } else {
@@ -270,23 +262,31 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_lockBtnActionPerformed
 
     private void chgpassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chgpassBtnActionPerformed
-        if(table.getSelectedRow() >= 0){
-            JTextField password = new JPasswordField();
-            JTextField confpass = new JPasswordField();
-            designer(password, "PASSWORD");
-            designer(confpass, "CONFIRM PASSWORD");
-            
-            Object[] message = {
-                "Enter New Password:", password, confpass
-            };
+        if (table.getSelectedRow() >= 0) {
+        JTextField password = new JPasswordField();
+        JTextField confpass = new JPasswordField();
+        designer(password, "PASSWORD");
+        designer(confpass, "CONFIRM PASSWORD");
 
-            int result = JOptionPane.showConfirmDialog(null, message, "CHANGE PASSWORD", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-            
-            if (result == JOptionPane.OK_OPTION) {
-                System.out.println(password.getText());
-                System.out.println(confpass.getText());
+        Object[] message = {
+            "Enter New Password:", password, confpass
+        };
+
+        int result = JOptionPane.showConfirmDialog(null, message, "CHANGE PASSWORD", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String newPassword = password.getText();
+            String confPassword = confpass.getText();
+            String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+
+            if (sqlite.changePassword(username, newPassword, confPassword,currentUser.getUsername())) {
+                JOptionPane.showMessageDialog(null, "Password updated successfully for user: " + username);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update password. Please ensure the passwords match and meet the requirements.");
             }
         }
+}
+
     }//GEN-LAST:event_chgpassBtnActionPerformed
     public String getTime(){
         LocalDateTime currentDateTime = LocalDateTime.now();
