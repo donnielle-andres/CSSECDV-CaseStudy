@@ -241,7 +241,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(priceFld.getText());
         }
     }//GEN-LAST:event_addBtnActionPerformed
-//NOT IMPLEMENTED YET
+
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if(table.getSelectedRow() >= 0){
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
@@ -263,6 +263,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                    int newStock = Integer.parseInt(stockFld.getText());
                    double newPrice = Double.parseDouble(priceFld.getText());
                    sqlite.editProduct(currentName, newName, newStock, newPrice, currentUser.getUsername());
+                   JOptionPane.showMessageDialog(this, "Product edited successfully!", "Product Edits Successfull", JOptionPane.OK_OPTION);
                    System.out.println(newName);
                    System.out.println(newStock);
                    System.out.println(newPrice);
