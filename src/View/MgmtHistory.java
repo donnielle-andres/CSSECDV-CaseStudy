@@ -48,7 +48,7 @@ public class MgmtHistory extends javax.swing.JPanel {
         }
         System.out.println("currentUser" + currentUser.getUsername());
         int currentUserRole = currentUser.getRole();
-        if(currentUserRole == 2){
+        if(currentUserRole == 2){ //only get the user history
             ArrayList<History> history = sqlite.getUserHistory(currentUser.getUsername());
             for(int nCtr = 0; nCtr < history.size(); nCtr++){
                 Product product = sqlite.getProduct(history.get(nCtr).getName());
@@ -189,19 +189,23 @@ public class MgmtHistory extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, message, "SEARCH HISTORY", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
-//          CLEAR TABLE
-            for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
+            for (int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--) {
                 tableModel.removeRow(0);
             }
 
-//          LOAD CONTENTS
-            ArrayList<History> history = sqlite.getHistory();
-            for(int nCtr = 0; nCtr < history.size(); nCtr++){
-                if(searchFld.getText().contains(history.get(nCtr).getUsername()) || 
-                   history.get(nCtr).getUsername().contains(searchFld.getText()) || 
-                   searchFld.getText().contains(history.get(nCtr).getName()) || 
-                   history.get(nCtr).getName().contains(searchFld.getText())){
-                
+            ArrayList<History> history;
+            if (currentUser.getRole() == 2) {
+                history = sqlite.getUserHistory(currentUser.getUsername());
+            } else {
+                history = sqlite.getHistory();
+            }
+
+            for (int nCtr = 0; nCtr < history.size(); nCtr++) {
+                if (searchFld.getText().contains(history.get(nCtr).getUsername()) || 
+                    history.get(nCtr).getUsername().contains(searchFld.getText()) || 
+                    searchFld.getText().contains(history.get(nCtr).getName()) || 
+                    history.get(nCtr).getName().contains(searchFld.getText())) {
+
                     Product product = sqlite.getProduct(history.get(nCtr).getName());
                     tableModel.addRow(new Object[]{
                         history.get(nCtr).getUsername(), 

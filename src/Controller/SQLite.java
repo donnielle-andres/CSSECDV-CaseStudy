@@ -161,7 +161,8 @@ public class SQLite {
     
     public void addHistory(String username, String name, int stock, String timestamp) {
         String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
-        
+        String formattedDateTime = getTime();
+        addLogs( "BOUGHT", username, username + "bought "+stock+" "+name, formattedDateTime);
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
             stmt.execute(sql);
@@ -181,9 +182,10 @@ public class SQLite {
         }
     }
     
-    public void addProduct(String name, int stock, double price) {
+    public void addProduct(String name, int stock, double price, String userActor) {
         String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
-        
+        String formattedDateTime = getTime();
+        addLogs( "ADDPD", userActor, name + " was added with qty "+stock+" and price "+price, formattedDateTime);
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
             stmt.execute(sql);
@@ -472,20 +474,20 @@ public class SQLite {
         }
     }
     
-    public void deleteProduct(String name) {
+    public void deleteProduct(String name, String userActor) {
         String sql = "DELETE FROM product WHERE name = ?";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, name);
             pstmt.executeUpdate();
-            System.out.println("Product '" + name + "' deleted successfully.");
+            addLogs( "DELPD", userActor, name + " (Product) was deleted.", getTime());
         } catch (Exception ex) {
             System.out.println("Error deleting product: " + ex.getMessage());
         }
     }
     
-    public void editProduct(String name, String newName, int stock, double price) {
+    public void editProduct(String name, String newName, int stock, double price, String userActor) {
         String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -497,7 +499,9 @@ public class SQLite {
             int rowsUpdated = pstmt.executeUpdate();
 
             if (rowsUpdated > 0) {
-                System.out.println("Product '" + name + "' updated successfully to '" + newName + "'.");
+                String formattedDateTime = getTime();
+                addLogs("EDTPD", userActor, name + " (Product) was edited.", formattedDateTime);
+   
             } else {
                 System.out.println("Product '" + name + "' not found.");
             }
