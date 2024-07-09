@@ -396,6 +396,29 @@ public class Frame extends javax.swing.JFrame {
         }
     }
     
+    public boolean checkAccountStatus(String username){
+        User existingUser = main.sqlite.getUserInfo(username);
+        if (existingUser.getLocked() == 1) {
+            System.out.println("Account is Locked: " + existingUser.getUsername());
+            return true; // Account is Locked
+            
+        }else{
+            System.out.println("Account is Not Locked: " + existingUser.getUsername());
+            return false; // Account is Not Locked
+        }
+    }
+    
+    public void lockAccount(String username){
+        User existingUser = main.sqlite.getUserInfo(username);
+        if (existingUser.getLocked() == 1) {
+            System.out.println("Account is Already Locked: " + existingUser.getUsername());
+        }
+        else if (existingUser.getLocked() == 0){
+            System.out.println("Locking Account of: " + existingUser.getUsername());
+            main.sqlite.setUserLockedStatus(username, 1, "2");
+        }
+    }
+    
     public boolean loginAction(String username, String password){
         boolean validator = main.sqlite.validateUser(username, password);
         if (validator == true){

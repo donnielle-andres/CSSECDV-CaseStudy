@@ -610,17 +610,17 @@ public class SQLite {
         }
     }
     
-    public boolean setUserLockedStatus(String username, boolean locked, String userActor) {
+    public boolean setUserLockedStatus(String username, int lockedStatus, String userActor) {
         String sql = "UPDATE users SET locked = ? WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setBoolean(1, locked);
+            pstmt.setInt(1, lockedStatus); // Use setInt for integer values
             pstmt.setString(2, username);
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
-                String status = locked ? "locked" : "unlocked";
+                String status = lockedStatus == 1 ? "locked" : "unlocked";
                 String formattedDateTime = getTime();
-                addLogs("LOCKCHG", userActor, userActor + " has set "+username+" to status: "+ status, formattedDateTime);
+                addLogs("LOCKCHG", userActor, userActor + " has set " + username + " to status: " + status, formattedDateTime);
                 return true;
             } else {
                 System.out.println("User not found: " + username);
@@ -631,10 +631,49 @@ public class SQLite {
             return false;
         }
     }
+
+    
+    public boolean accountStatus(String username) {
+        String sql = "SELECT locked FROM users WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Retrieve the locked status as an integer
+                int lockedInt = rs.getInt("locked");
+
+                // Convert the integer to a boolean based on its value               
+                if (lockedInt == 1){
+                    System.out.println(username + "is Locked" );
+                    return true;   
+                }else if (lockedInt == 0){
+                    System.out.println(username + "is Not Locked" );
+                    return false;
+                }
+
+            } else {
+                System.out.printf("User not found: %s%n", username);
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+        
+        return false;
+    }
+
+    
+    
     public void logOut(String username){
         String formattedDateTime = getTime();
         addLogs("LOGOUT", username, username + " has logged out", formattedDateTime);
     }
+    
    
     
     public String getTime(){

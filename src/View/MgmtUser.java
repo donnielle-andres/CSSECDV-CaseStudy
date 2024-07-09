@@ -249,7 +249,7 @@ public class MgmtUser extends javax.swing.JPanel {
         );
         
         if (result == JOptionPane.YES_OPTION) {
-            boolean statusChanged = sqlite.setUserLockedStatus(username, !currentlyLocked,currentUser.getUsername());
+            boolean statusChanged = sqlite.setUserLockedStatus(username, 1 ,currentUser.getUsername());
             if (statusChanged) {
                 JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
