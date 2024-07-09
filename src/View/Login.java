@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
+    public int accountAttempts = 0;
     
     public Login() {
         initComponents();
@@ -105,8 +106,7 @@ public class Login extends javax.swing.JPanel {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         String username = usernameFld.getText();
         String actualPassword = new String(passwordFld.getPassword());
-        int accountAttempts = 0;
-        
+           
         if (!username.isEmpty() && !actualPassword.isEmpty()) {
             
             boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
@@ -117,9 +117,13 @@ public class Login extends javax.swing.JPanel {
             }
             else if (frame.checkAccountStatus(username) == true){
                 JOptionPane.showMessageDialog(frame, "Account is locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                clearInputs();
+                return;
             }
             else if (!frame.checkAccountStatus(username) && (accountAttempts != 5) && !loginSuccessful){
                 accountAttempts++;
+                System.out.println("Account Attempt: " + accountAttempts);
+
             }
             else if ((accountAttempts == 5) && !loginSuccessful){
                 //LOCK ACCOUNT

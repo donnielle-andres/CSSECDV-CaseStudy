@@ -401,7 +401,6 @@ public class Frame extends javax.swing.JFrame {
         if (existingUser.getLocked() == 1) {
             System.out.println("Account is Locked: " + existingUser.getUsername());
             return true; // Account is Locked
-            
         }else{
             System.out.println("Account is Not Locked: " + existingUser.getUsername());
             return false; // Account is Not Locked
