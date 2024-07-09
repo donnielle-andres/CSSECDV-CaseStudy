@@ -228,7 +228,15 @@ public class SQLite {
         }
 
         if (hashedPass != null) {
-            return PasswordFunctions.checkHashed(password, hashedPass);
+            String formattedDateTime = getTime();
+            boolean isCorrect = PasswordFunctions.checkHashed(password, hashedPass);
+            if (isCorrect){
+                addLogs( "LOGIN", username, username + " logged in", formattedDateTime);
+            }
+            else{
+               addLogs( "FAILLGN", username, username + " failed to logged in", formattedDateTime); 
+            }
+            return isCorrect;
         } else {
             return false;
         }
@@ -429,6 +437,8 @@ public class SQLite {
             // Log the exception message or stack trace for debugging
             System.err.println("Add User Error: " + ex.getMessage());
         }
+        String formattedDateTime = getTime();
+        addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
     }
     
     public void addUser(String username, String password, String mfa1, String mfa2) {
@@ -615,6 +625,11 @@ public class SQLite {
             return false;
         }
     }
+    public void logOut(String username){
+        String formattedDateTime = getTime();
+        addLogs("LOGOUT", username, username + " has logged out", formattedDateTime);
+    }
+   
     
     public String getTime(){
         LocalDateTime currentDateTime = LocalDateTime.now();
