@@ -439,8 +439,8 @@ public class SQLite {
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
-            pstmt.setString(4, hashedmfa1);
-            pstmt.setString(5, hashedmfa2);
+            pstmt.setString(3, hashedmfa1);
+            pstmt.setString(4, hashedmfa2);
             pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
