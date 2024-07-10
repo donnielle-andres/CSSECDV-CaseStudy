@@ -33,7 +33,7 @@ public class Register extends javax.swing.JPanel {
         });
 
         usernameFld.setBackground(new java.awt.Color(240, 240, 240));
-        usernameFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        usernameFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         usernameFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         usernameFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "USERNAME", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
@@ -51,7 +51,7 @@ public class Register extends javax.swing.JPanel {
         });
 
         mfaFld1.setBackground(new java.awt.Color(240, 240, 240));
-        mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         mfaFld1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         mfaFld1.setMinimumSize(new java.awt.Dimension(64, 45));
@@ -62,7 +62,7 @@ public class Register extends javax.swing.JPanel {
         });
 
         mfaFld2.setBackground(new java.awt.Color(240, 240, 240));
-        mfaFld2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        mfaFld2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         mfaFld2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mfaFld2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT COLOR IS YOUR EYE?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         mfaFld2.setPreferredSize(new java.awt.Dimension(64, 46));
@@ -73,12 +73,12 @@ public class Register extends javax.swing.JPanel {
         });
 
         passwordFld.setBackground(new java.awt.Color(240, 240, 240));
-        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         confirmpasswordFld.setBackground(new java.awt.Color(240, 240, 240));
-        confirmpasswordFld.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        confirmpasswordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         confirmpasswordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         confirmpasswordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
@@ -147,23 +147,22 @@ public class Register extends javax.swing.JPanel {
         else if (!isValidUsername) {
             JOptionPane.showMessageDialog(frame, "Username must consists of atleast 8 characters and 2 digits", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
-        // VALIDATE PASSWORD
-        else if (!PasswordFunctions.validatePassword(password, username)) {
-            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits and 1 special character", "Registration Error", JOptionPane.ERROR_MESSAGE);
-        } 
         else if (!isNewUser || !password.equals(confirmPassword)){
             JOptionPane.showMessageDialog(frame, "Check username and password", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
+        // VALIDATE PASSWORD
+        else if (!PasswordFunctions.validatePassword(password, username)) {
+            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits, 1 special character, and must not contain the username", "Registration Error", JOptionPane.ERROR_MESSAGE);
+        }       
         else {
             // All validations passed, proceed with registration
             frame.registerAction(username, password, confirmPassword, mfaInput1, mfaInput2);
             JOptionPane.showMessageDialog(frame, "Registration Successful. You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
             frame.loginNav(); 
-
+            
         }
         // Clear fields
         clearInputs();
-        
     }//GEN-LAST:event_registerBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed

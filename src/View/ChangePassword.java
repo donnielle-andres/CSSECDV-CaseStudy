@@ -155,13 +155,14 @@ public class ChangePassword extends javax.swing.JPanel {
         if (username.equals("") || password.equals("") || confirmPassword.equals("")) {
             JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Change Password Failed!", JOptionPane.INFORMATION_MESSAGE);
             clearInputs();
-        }else if (!password.equals(confirmPassword) || !userExists){
+        }else if (!password.equals(confirmPassword) || !userExists || (frame.checkAccountStatus(username) == true)){
             JOptionPane.showMessageDialog(frame, "Check Username and Password", "Change Password Error", JOptionPane.ERROR_MESSAGE);
             clearInputs();
         }else if (!PasswordFunctions.validatePassword(password, username)) {
-            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits and 1 special character", "Change Password Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits, 1 special character, and must not contain the username", "Change Password Error", JOptionPane.ERROR_MESSAGE);
             clearInputs();
-        }else{
+        }
+        else {
             System.out.println("User Changing Password Valid!!!" );
             frame.changePassword(username, password, confirmPassword);
             clearInputs();

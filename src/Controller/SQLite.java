@@ -100,12 +100,14 @@ public class SQLite {
             stmt.execute(sqlCreateTable);
             System.out.println("Table users in database.db created.");
 
+            /*
             // Fetch and print the column names
             String sqlFetchColumns = "PRAGMA table_info(users)";
             ResultSet rs = stmt.executeQuery(sqlFetchColumns);
             while (rs.next()) {
                 System.out.println(rs.getString("name")); // Prints the column name
             }
+            */
         } catch (Exception ex) {
             System.err.println("createUserTable Error: " + ex.getMessage());
         }

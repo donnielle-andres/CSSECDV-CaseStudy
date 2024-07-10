@@ -173,7 +173,7 @@ public class ForgotPassword extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(frame, "Confirmation Failed! Please check your username and MFA Answers", "User Confirmation Failed!", JOptionPane.ERROR_MESSAGE);
             clearInputs();
         }
-           
+        
     }//GEN-LAST:event_confirmUserBtnActionPerformed
 
     private void clearInputs(){

@@ -332,7 +332,7 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void loginNav() {
-        System.out.println("Login Nav: " + currentUser.getUsername());
+        //System.out.println("Login Nav: " + currentUser.getUsername());
         if (currentUser!= null) {
             currentUser = null; // Explicitly set currentUser to null upon logout
         }
