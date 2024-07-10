@@ -376,7 +376,7 @@ public class Frame extends javax.swing.JFrame {
 
     public boolean changePassword(String username, String password, String confpassword) {
         try {
-            main.sqlite.changePassword(username, password, confpassword, "2");
+            main.sqlite.changePassword(username, password, confpassword, username);
             return true;
         } catch (Exception e) {
             System.err.println("An error occurred while changing the password: " + e.getMessage());
@@ -414,7 +414,7 @@ public class Frame extends javax.swing.JFrame {
         }
         else if (existingUser.getLocked() == 0){
             System.out.println("Locking Account of: " + existingUser.getUsername());
-            main.sqlite.setUserLockedStatus(username, 1, "2");
+            main.sqlite.setUserLockedStatus(username, 1, username);
         }
     }
     

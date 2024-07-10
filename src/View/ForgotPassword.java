@@ -162,6 +162,10 @@ public class ForgotPassword extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(frame, "Must complete all fields!", "User Confirmation Failed!", JOptionPane.INFORMATION_MESSAGE);
             clearInputs();
         }
+        else if (frame.checkAccountStatus(username)){
+             JOptionPane.showMessageDialog(frame, "Your account is locked. Please contact your administrator.", "User Confirmation Failed!", JOptionPane.ERROR_MESSAGE);
+             clearInputs();
+        }
         else if (confirmSuccess){   
             frame.changePassNav(username);
             clearInputs();
