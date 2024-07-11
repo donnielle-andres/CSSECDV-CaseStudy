@@ -31,21 +31,25 @@ public class MgmtProduct extends javax.swing.JPanel {
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
-        
+//        UNCOMMENT TO DISABLE BUTTONS
+        purchaseBtn.setVisible(false);
+        addBtn.setVisible(false);
+        editBtn.setVisible(false);
+        deleteBtn.setVisible(false);        
         if (currentUser.getRole()==2){ //Client can only buy stuff
-            addBtn.setVisible(false);
-            editBtn.setVisible(false);
-            deleteBtn.setVisible(false);
+            purchaseBtn.setVisible(true);
         }
         else if(currentUser.getRole()==3){ //Staff can add and edit, but not buy
-            purchaseBtn.setVisible(false);
-            deleteBtn.setVisible(false);
+            addBtn.setVisible(true);
+            editBtn.setVisible(true);
         }
-//        UNCOMMENT TO DISABLE BUTTONS
-//        purchaseBtn.setVisible(false);
-//        addBtn.setVisible(false);
-//        editBtn.setVisible(false);
-//        deleteBtn.setVisible(false);
+        else if(currentUser.getRole()==4||currentUser.getRole()==5){ //admins and managers can do everything
+            purchaseBtn.setVisible(true);
+            addBtn.setVisible(true);
+            editBtn.setVisible(true);
+            deleteBtn.setVisible(true);               
+        }
+
     }
 
     public void init(){

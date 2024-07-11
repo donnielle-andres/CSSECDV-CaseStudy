@@ -305,8 +305,7 @@ public class Frame extends javax.swing.JFrame {
             break;
         case 3: //staff
             staffBtn.setVisible(true);
-            staffBtn.setEnabled(true);
-                        clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
+            staffBtn.setEnabled(true);           
             staffHomePnl.init(main.sqlite, currentUser);
             Content.add(staffHomePnl, "staffHomePnl");
             staffHomePnl.showPnl("home");

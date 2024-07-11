@@ -62,7 +62,7 @@ public class MgmtHistory extends javax.swing.JPanel {
                 });
             }
         }
-        else{
+        else if(currentUserRole==3||currentUserRole==4||currentUserRole==5){
            //      LOAD CONTENTS
             ArrayList<History> history = sqlite.getHistory();
             for(int nCtr = 0; nCtr < history.size(); nCtr++){
@@ -192,11 +192,11 @@ public class MgmtHistory extends javax.swing.JPanel {
             for (int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--) {
                 tableModel.removeRow(0);
             }
-
             ArrayList<History> history;
+            history=null;
             if (currentUser.getRole() == 2) {
                 history = sqlite.getUserHistory(currentUser.getUsername());
-            } else {
+            } else if (currentUser.getRole()==3||currentUser.getRole()==4||currentUser.getRole()==5) {
                 history = sqlite.getHistory();
             }
 

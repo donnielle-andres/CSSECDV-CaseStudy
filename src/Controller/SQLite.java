@@ -216,18 +216,18 @@ public class SQLite {
                     hashedPass = rs.getString("password");
                     isLocked = rs.getBoolean("locked");
                 } else {
-                    System.out.println("Username or Password is incorrect");
+                    //System.out.println("Username or Password is incorrect");
                     return false;
                 }
             }
         } catch (Exception ex) {
-            System.out.println("Error retrieving user: " + ex.getMessage());
+            //System.out.println("Error retrieving user: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }
 
         if (isLocked) {
-            System.out.println("Account is locked");
+            //System.out.println("Account is locked");
             return false;
         }
 
@@ -613,23 +613,34 @@ public class SQLite {
     }
     
     public boolean setUserLockedStatus(String username, int lockedStatus, String userActor) {
+        if (lockedStatus != 0 && lockedStatus != 1) {
+            System.out.println("Invalid locked status: " + lockedStatus);
+            return false;
+        }
+
         String sql = "UPDATE users SET locked = ? WHERE username = ?";
+        int finalStatus = (lockedStatus == 0) ? 0 : 1;
+        System.out.println("locked status to set: " + lockedStatus);
+        System.out.println("Final status to set: " + finalStatus);
+
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, lockedStatus); // Use setInt for integer values
+            pstmt.setInt(1, finalStatus);
             pstmt.setString(2, username);
             int affectedRows = pstmt.executeUpdate();
+
             if (affectedRows > 0) {
-                String status = lockedStatus == 1 ? "locked" : "unlocked";
+                String status = (finalStatus == 1) ? "locked" : "unlocked";
                 String formattedDateTime = getTime();
                 addLogs("LOCKCHG", userActor, userActor + " has set " + username + " to status: " + status, formattedDateTime);
+                System.out.println("Status change successful for user: " + username);
                 return true;
             } else {
                 System.out.println("User not found: " + username);
                 return false;
             }
         } catch (Exception ex) {
-            System.out.print(ex);
+            System.out.println("Exception: " + ex.getMessage());
             return false;
         }
     }

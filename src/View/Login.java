@@ -122,7 +122,7 @@ public class Login extends javax.swing.JPanel {
             }
             else if (!frame.checkAccountStatus(username) && (accountAttempts != 5) && !loginSuccessful){
                 accountAttempts++;
-                System.out.println("Account Attempt: " + accountAttempts);
+                JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
 
             }
             else if ((accountAttempts == 5) && !loginSuccessful){

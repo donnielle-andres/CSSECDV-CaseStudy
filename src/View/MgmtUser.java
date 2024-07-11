@@ -34,22 +34,21 @@ public class MgmtUser extends javax.swing.JPanel {
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         int role = currentUser.getRole();
-        if(role==3){ //staff
-            editRoleBtn.setVisible(false);
-            deleteBtn.setVisible(false);
-            lockBtn.setVisible(false);
-            chgpassBtn.setVisible(false);
-        }
-        else if(role==4){ //manager
-            editRoleBtn.setVisible(false);
-            deleteBtn.setVisible(false);
-            chgpassBtn.setVisible(false);
-        }
 //        UNCOMMENT TO DISABLE BUTTONS
-//        editBtn.setVisible(false);
-//        deleteBtn.setVisible(false);
-//        lockBtn.setVisible(false);
-//        chgpassBtn.setVisible(false);
+        editRoleBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+        lockBtn.setVisible(false);
+        chgpassBtn.setVisible(false);
+        if(role==4){ //manager
+            lockBtn.setVisible(true);
+        }
+        else if(role==5){ //admin
+            editRoleBtn.setVisible(true);
+            deleteBtn.setVisible(true);
+            lockBtn.setVisible(true);
+            chgpassBtn.setVisible(true);
+        }
+
     }
     
     public void init(){
@@ -241,7 +240,7 @@ public class MgmtUser extends javax.swing.JPanel {
         String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
         boolean currentlyLocked = "1".equals(tableModel.getValueAt(table.getSelectedRow(), 3).toString());
         String state = currentlyLocked ? "unlock" : "lock";
-        
+        int isLocked = currentlyLocked ? 0:1;
         int result = JOptionPane.showConfirmDialog(null, 
             "Are you sure you want to " + state + " " + username + "?", 
             "CONFIRM ACTION", 
@@ -249,7 +248,7 @@ public class MgmtUser extends javax.swing.JPanel {
         );
         
         if (result == JOptionPane.YES_OPTION) {
-            boolean statusChanged = sqlite.setUserLockedStatus(username, 1 ,currentUser.getUsername());
+            boolean statusChanged = sqlite.setUserLockedStatus(username, isLocked ,currentUser.getUsername());
             if (statusChanged) {
                 JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
