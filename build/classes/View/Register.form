@@ -84,6 +84,7 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="toolTipText" type="java.lang.String" value="Username must be at least eight characters long, lowercase, and have at least two numbers."/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder justification="2" title="USERNAME">
@@ -136,9 +137,6 @@
             </TitledBorder>
           </Border>
         </Property>
-        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[64, 45]"/>
-        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mfaFld1ActionPerformed"/>
@@ -183,6 +181,7 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="toolTipText" type="java.lang.String" value="The password should have a minimum of 15 characters and include a combination of uppercase and lowercase letters, a special character, two numbers, and should not include the username "/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder justification="2" position="2" title="ENTER PASSWORD">

@@ -35,6 +35,7 @@ public class Register extends javax.swing.JPanel {
         usernameFld.setBackground(new java.awt.Color(240, 240, 240));
         usernameFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         usernameFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        usernameFld.setToolTipText("Username must be at least eight characters long, lowercase, and have at least two numbers.");
         usernameFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "USERNAME", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -54,7 +55,6 @@ public class Register extends javax.swing.JPanel {
         mfaFld1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         mfaFld1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mfaFld1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "WHAT IS YOUR MOTHER'S MAIDEN NAME?", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        mfaFld1.setMinimumSize(new java.awt.Dimension(64, 45));
         mfaFld1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mfaFld1ActionPerformed(evt);
@@ -75,6 +75,7 @@ public class Register extends javax.swing.JPanel {
         passwordFld.setBackground(new java.awt.Color(240, 240, 240));
         passwordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        passwordFld.setToolTipText("The password should have a minimum of 15 characters and include a combination of uppercase and lowercase letters, a special character, two numbers, and should not include the username ");
         passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "ENTER PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         confirmpasswordFld.setBackground(new java.awt.Color(240, 240, 240));
@@ -91,7 +92,7 @@ public class Register extends javax.swing.JPanel {
                 .addComponent(backBtn)
                 .addGap(122, 122, 122)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mfaFld1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mfaFld1)
                     .addComponent(confirmpasswordFld)
                     .addComponent(passwordFld)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
