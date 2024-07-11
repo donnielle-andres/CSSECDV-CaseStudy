@@ -687,7 +687,7 @@ public class SQLite {
         addLogs("LOGOUT", username, username + " has logged out", formattedDateTime);
     }
     
-   
+
     
     public String getTime(){
         LocalDateTime currentDateTime = LocalDateTime.now();

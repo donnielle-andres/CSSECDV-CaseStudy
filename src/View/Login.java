@@ -104,41 +104,39 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        String username = usernameFld.getText();
-        String actualPassword = new String(passwordFld.getPassword());
-           
-        if (!username.isEmpty() && !actualPassword.isEmpty()) {
-            
-            boolean loginSuccessful = frame.loginAction(usernameFld.getText(), actualPassword);
-            
-            if(loginSuccessful && !frame.checkAccountStatus(username)){
-                frame.mainNav(usernameFld.getText());
+    String username = usernameFld.getText();
+    String actualPassword = new String(passwordFld.getPassword());
+
+    if (!username.isEmpty() && !actualPassword.isEmpty()) {
+        boolean userExists = frame.checkExistingUser(username);
+
+        if (userExists) {
+            boolean loginSuccessful = frame.loginAction(username, actualPassword);
+
+            if (loginSuccessful && !frame.checkAccountStatus(username)) {
+                frame.mainNav(username);
                 clearInputs();
-            }
-            else if (frame.checkAccountStatus(username) == true){
+            } else if (frame.checkAccountStatus(username)) {
                 JOptionPane.showMessageDialog(frame, "Account is locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
                 clearInputs();
-                return;
-            }
-            else if (!frame.checkAccountStatus(username) && (accountAttempts != 5) && !loginSuccessful){
+            } else {
                 accountAttempts++;
-                JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-
+                if (accountAttempts >= 5) {
+                    frame.lockAccount(username);
+                    JOptionPane.showMessageDialog(frame, "Account has been locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-            else if ((accountAttempts == 5) && !loginSuccessful){
-                //LOCK ACCOUNT
-                frame.lockAccount(username);
-                JOptionPane.showMessageDialog(frame, "Account has been locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            }
-            else{
-                JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            }
-
         } else {
-            JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-        clearInputs();
+    } else {
+        JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    clearInputs();
+
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
