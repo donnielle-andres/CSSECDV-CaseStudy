@@ -24,16 +24,18 @@ public class PasswordFunctions {
         // Convert both password and username to lowercase for case-insensitive comparison
         String lowerCasePassword = plainPassword.toLowerCase();
         String lowerCaseUsername = username.toLowerCase();
-    
+        
         // Must be minimum length of 15
         if (plainPassword.length() < 15){
-            // System.out.println("Password is short");
+            //System.out.println("Password is short");
             return false;
         }
         
         // Must not contain username in any case
+        Pattern lowerCasePattern = Pattern.compile("[a-z]");
+        Matcher lowerCaseMatcher = lowerCasePattern.matcher(plainPassword);
         if (lowerCasePassword.contains(lowerCaseUsername)){
-            // System.out.println("Password contains username");
+            //System.out.println("Password contains username");
             return false;
         }
     
@@ -45,9 +47,8 @@ public class PasswordFunctions {
             return false;
         }
     
-        Pattern lowerCasePattern = Pattern.compile("[a-z]");
-        Matcher lowerCaseMatcher = lowerCasePattern.matcher(plainPassword);
-        if (!lowerCaseMatcher.find()) {
+        
+        else if (!lowerCaseMatcher.find()) {
             // System.out.println("Password must have lowercase");
             return false;
         }
@@ -63,7 +64,7 @@ public class PasswordFunctions {
             // System.out.println("Password must have at least 2 numbers and 1 special character");
             return false;
         }
-    
+
         Pattern specialCharacterPattern = Pattern.compile("[@#$%^&*(),.?\":{}|<>]");
         Matcher specialCharacterMatcher = specialCharacterPattern.matcher(plainPassword);
         if (!specialCharacterMatcher.find()) {

@@ -248,7 +248,7 @@ public class SQLite {
 
     
     // FOR FORGET PASSWORD
-    public boolean confirmUserForgot(String username, String mfa1, String mfa2) {
+    public boolean checkMFAs(String username, String mfa1, String mfa2) {
         String sql = "SELECT username, mfa1, mfa2 FROM users WHERE username = ?";
         String hashedMfa1 = null;
         String hashedMfa2 = null;
