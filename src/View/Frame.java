@@ -281,7 +281,7 @@ public class Frame extends javax.swing.JFrame {
         
         activeUser = true;
         currentUser = main.sqlite.getUserInfo(Username);
-        System.out.println("Currently Logged In: " + currentUser.getUsername());
+        //System.out.println("Currently Logged In: " + currentUser.getUsername());
         
         int currentUserRole = currentUser.getRole();
         switch (currentUserRole){
@@ -313,8 +313,8 @@ public class Frame extends javax.swing.JFrame {
         case 2: //client
             clientBtn.setVisible(true);
             clientBtn.setEnabled(true);
-            clientHomePnl = new ClientHome(currentUser); // Ensure this is done after currentUser is set
-            clientHomePnl.init(main.sqlite, currentUser); // Initialize ClientHome with the current user
+            clientHomePnl = new ClientHome(currentUser); 
+            clientHomePnl.init(main.sqlite, currentUser); 
             clientHomePnl.init(main.sqlite, currentUser);
             contentView.show(Content, "clientHomePnl");
             Content.add(clientHomePnl, "clientHomePnl");
@@ -360,13 +360,13 @@ public class Frame extends javax.swing.JFrame {
         
         boolean checkmfa = main.sqlite.checkMFAs(username, mfa1, mfa2);
         if (checkmfa){
-            System.out.println("MFAs are correct");
+            //System.out.println("MFAs are correct");
             return true;
         }else if (checkmfa == false) {
-            System.out.println("MFAs are wrong");
+            //System.out.println("MFAs are wrong");
             return false;
         }else{
-            System.out.println("confirmUser Error");
+            //System.out.println("confirmUser Error");
             return false;
         }
     }
@@ -386,7 +386,7 @@ public class Frame extends javax.swing.JFrame {
         // Check if the username already exists in the database
         User existingUser = main.sqlite.getUserInfo(username);
         if (existingUser != null) {
-            System.out.println("Account Exists: " + existingUser.getUsername());
+            //System.out.println("Account Exists: " + existingUser.getUsername());
             return true; // Username exists
             
         }else{
@@ -398,13 +398,13 @@ public class Frame extends javax.swing.JFrame {
         User existingUser = main.sqlite.getUserInfo(username);
         
         if (existingUser != null && existingUser.getLocked() == 1) {
-            System.out.println("Account is Locked: " + existingUser.getUsername());
+            //System.out.println("Account is Locked: " + existingUser.getUsername());
             return true; // Account is Locked
         } else if (existingUser != null && existingUser.getLocked() == 0) {
-            System.out.println("Account is Not Locked: " + existingUser.getUsername());
+            //System.out.println("Account is Not Locked: " + existingUser.getUsername());
             return false; // Account is Not Locked
         }else{
-            System.out.println("Account does not exists");
+            //System.out.println("Account does not exists");
             return false;
         }
     }
@@ -412,10 +412,10 @@ public class Frame extends javax.swing.JFrame {
     public void lockAccount(String username){
         User existingUser = main.sqlite.getUserInfo(username);
         if (existingUser.getLocked() == 1) {
-            System.out.println("Account is Already Locked: " + existingUser.getUsername());
+            //System.out.println("Account is Already Locked: " + existingUser.getUsername());
         }
         else if (existingUser.getLocked() == 0){
-            System.out.println("Locking Account of: " + existingUser.getUsername());
+            //System.out.println("Locking Account of: " + existingUser.getUsername());
             main.sqlite.setUserLockedStatus(username, 1, username);
         }
     }

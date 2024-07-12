@@ -202,7 +202,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
-                System.out.println(stockFld.getText());
+                //System.out.println(stockFld.getText());
                 int stockBought = Integer.parseInt(stockFld.getText());
                 String productBought = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 boolean purchaseSuccessfull = sqlite.buyProduct(productBought, stockBought);
@@ -240,9 +240,9 @@ public class MgmtProduct extends javax.swing.JPanel {
             double price = Double.parseDouble(priceFld.getText());
             sqlite.addProduct(name, stock, price, currentUser.getUsername());
             JOptionPane.showMessageDialog(this, "Product added successfully!", "Product Addition Successfull", JOptionPane.OK_OPTION);
-            System.out.println(nameFld.getText());
-            System.out.println(stockFld.getText());
-            System.out.println(priceFld.getText());
+            //System.out.println(nameFld.getText());
+            //System.out.println(stockFld.getText());
+            //System.out.println(priceFld.getText());
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -268,9 +268,9 @@ public class MgmtProduct extends javax.swing.JPanel {
                    double newPrice = Double.parseDouble(priceFld.getText());
                    sqlite.editProduct(currentName, newName, newStock, newPrice, currentUser.getUsername());
                    JOptionPane.showMessageDialog(this, "Product edited successfully!", "Product Edits Successfull", JOptionPane.OK_OPTION);
-                   System.out.println(newName);
-                   System.out.println(newStock);
-                   System.out.println(newPrice);
+                   //System.out.println(newName);
+                   //System.out.println(newStock);
+                   //System.out.println(newPrice);
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
@@ -283,7 +283,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                 String productDeleted = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 sqlite.deleteProduct(productDeleted, currentUser.getUsername());
                 JOptionPane.showMessageDialog(this, "Product deleted successfully!", "Product Deletion Successfull", JOptionPane.OK_OPTION);
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                //System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed

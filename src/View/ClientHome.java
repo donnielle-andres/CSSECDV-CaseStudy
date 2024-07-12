@@ -33,9 +33,9 @@ public class ClientHome extends javax.swing.JPanel {
     public ClientHome(User currentUser) {
         this.currentUser = currentUser;
         if (currentUser!= null) {
-            System.out.println("ClientHome initialized with user: " + currentUser.getUsername());
+            //System.out.println("ClientHome initialized with user: " + currentUser.getUsername());
         } else {
-            System.out.println("ClientHome initialized with null user");
+            //System.out.println("ClientHome initialized with null user");
         }
         initComponents();
     }
@@ -56,10 +56,14 @@ public class ClientHome extends javax.swing.JPanel {
         Content.add(mgmtLogs, "mgmtLogs");
         
 //        UNCOMMENT TO DISABLE BUTTONS
-//        historyBtn.setVisible(false);
+        historyBtn.setVisible(false);
         usersBtn.setVisible(false);
-//        productsBtn.setVisible(false);
+        productsBtn.setVisible(false);
         logsBtn.setVisible(false);
+        if(activeUser.getRole()==2){
+            productsBtn.setVisible(true);
+            historyBtn.setVisible(true);
+        }
     }
     
     public void showPnl(String panelName){

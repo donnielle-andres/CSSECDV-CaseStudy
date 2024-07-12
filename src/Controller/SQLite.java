@@ -24,7 +24,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL)) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("Database database.db created.");
+                //System.out.println("Database database.db created.");
             }
         } catch (Exception ex) {
             System.out.print(ex);
@@ -43,7 +43,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table history in database.db created.");
+            //System.out.println("Table history in database.db created.");
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -61,7 +61,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table logs in database.db created.");
+            //System.out.println("Table logs in database.db created.");
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -78,7 +78,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table product in database.db created.");
+            //System.out.println("Table product in database.db created.");
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -98,7 +98,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
              Statement stmt = conn.createStatement()) {
             stmt.execute(sqlCreateTable);
-            System.out.println("Table users in database.db created.");
+           // System.out.println("Table users in database.db created.");
 
             /*
             // Fetch and print the column names
@@ -265,12 +265,12 @@ public class SQLite {
                     hashedMfa2 = rs.getString("mfa2");
                     
                 } else {
-                    System.out.println("Hashed MFAs are incorrect");
+                    //System.out.println("Hashed MFAs are incorrect");
                     return false;
                 }
             }
         } catch (Exception ex) {
-            System.out.println("confirmUserForgot - Error retrieving user: " + ex.getMessage());
+            //System.out.println("confirmUserForgot - Error retrieving user: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }
@@ -438,7 +438,6 @@ public class SQLite {
             pstmt.executeUpdate();
 
         } catch (Exception ex) {
-            // Log the exception message or stack trace for debugging
             System.err.println("Add User Error: " + ex.getMessage());
         }
         String formattedDateTime = getTime();
@@ -546,11 +545,11 @@ public class SQLite {
                         updateStmt.executeUpdate();
                         return true; 
                     } else {
-                        System.out.println("Not enough stock available.");
+                        //System.out.println("Not enough stock available.");
                         return false;
                     }
                 } else {
-                    System.out.println("Product not found.");
+                    //System.out.println("Product not found.");
                     return false; 
                 }
             }
@@ -575,7 +574,7 @@ public class SQLite {
                     addLogs("PASSCHG", userActor,userActor + " has changed the password of "+username, formattedDateTime);
                     return true;
                 } else {
-                    System.out.println("User not found: " + username);
+                    //System.out.println("User not found: " + username);
                     return true;
                 }
             } catch (Exception ex) {
@@ -600,10 +599,10 @@ public class SQLite {
             if (affectedRows > 0) {
                 String formattedDateTime = getTime();
                 addLogs("ROLECHG", userActor, userActor + " changed the role of "+ username +" to " + newRole , formattedDateTime);
-                System.out.println("Role updated successfully for user: " + username);
+                //System.out.println("Role updated successfully for user: " + username);
                 return true;
             } else {
-                System.out.println("User not found: " + username);
+                //System.out.println("User not found: " + username);
                 return false;
             }
         } catch (Exception ex) {
@@ -633,10 +632,10 @@ public class SQLite {
                 String status = (finalStatus == 1) ? "locked" : "unlocked";
                 String formattedDateTime = getTime();
                 addLogs("LOCKCHG", userActor, userActor + " has set " + username + " to status: " + status, formattedDateTime);
-                System.out.println("Status change successful for user: " + username);
+                //System.out.println("Status change successful for user: " + username);
                 return true;
             } else {
-                System.out.println("User not found: " + username);
+                //System.out.println("User not found: " + username);
                 return false;
             }
         } catch (Exception ex) {
@@ -660,15 +659,15 @@ public class SQLite {
 
                 // Convert the integer to a boolean based on its value               
                 if (lockedInt == 1){
-                    System.out.println(username + "is Locked" );
+                    //System.out.println(username + "is Locked" );
                     return true;   
                 }else if (lockedInt == 0){
-                    System.out.println(username + "is Not Locked" );
+                    //System.out.println(username + "is Not Locked" );
                     return false;
                 }
 
             } else {
-                System.out.printf("User not found: %s%n", username);
+                //System.out.printf("User not found: %s%n", username);
                 return false;
             }
 
