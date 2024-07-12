@@ -11,6 +11,7 @@ import Model.*;
 public class ForgotPassword extends javax.swing.JPanel {
 
     public Frame frame;
+    public int attempts = 0;
     
     public ForgotPassword() {
         initComponents();
@@ -175,41 +176,60 @@ public class ForgotPassword extends javax.swing.JPanel {
         String mfaInput1 = mfaFld1.getText();
         String mfaInput2 = mfaFld2.getText();
         boolean checkMFA = frame.confirmUser(username, mfaInput1, mfaInput2);
-        
-        
+
         // CHECK COMPLETE INPUTS
         if (username.equals("") || mfaInput1.equals("") || mfaInput2.equals("") || password.equals("") || confirmPassword.equals("")) {
             JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Change Password Failed", JOptionPane.INFORMATION_MESSAGE);
             clearInputs();
+            return; 
         }
-        else if (frame.checkAccountStatus(username) || (frame.checkExistingUser(username)==false) ){
-            JOptionPane.showMessageDialog(frame, "Account is locked or does not exists. Please contact your administrator.", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
+        
+        // Attempt lockout handling
+        else if (attempts >= 1) {
+            frame.lockAccount(username);
+            JOptionPane.showMessageDialog(frame, "Account has been locked! Please contact your administrator.", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
             clearInputs();
+            return; 
         }
-        else if (!password.equals(confirmPassword) || (checkMFA == false)){
-            JOptionPane.showMessageDialog(frame, "Please check your Username and MFA Answers", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
+        
+        // Validate MFA answers
+        else if (!checkMFA) {
+            JOptionPane.showMessageDialog(frame, "Check inputs and try again.", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
+            attempts++;
             clearInputs();
-        }else if (PasswordFunctions.validatePassword(password, username) == false){
+            return; 
+        }
+        
+        // Check account status and existence
+        else if (frame.checkAccountStatus(username) || !frame.checkExistingUser(username)) {
+            JOptionPane.showMessageDialog(frame, "Account is locked or does not exist. Please contact your administrator.", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
+            clearInputs();
+            return; 
+        }
+        
+        // Confirm password match
+        else if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(frame, "Passwords do not match.", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
+            clearInputs();
+            return; 
+        }
+
+        // Validate password requirements
+        else if (!PasswordFunctions.validatePassword(password, username)) {
             JOptionPane.showMessageDialog(frame, "Please check Password Requirements ", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
             clearInputs();
+            return; 
         }
-        else if (checkMFA && (frame.checkAccountStatus(username)==false) && frame.checkExistingUser(username)){
-            
-            try {
-                frame.changePassword(username, password, confirmPassword);
-                JOptionPane.showMessageDialog(frame, "Password has been changed. You may now log in.", "Change Password", JOptionPane.OK_OPTION);
-                System.out.println("User Changing Password Done!!!");
-                clearInputs();
-                frame.loginNav();
-                
-            } catch (Exception e) {
-                //JOptionPane.showMessageDialog(frame, "An error occurred while changing the password.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println("ForgotPassword Error: " + e);
-            }
-            
-        }else{
-            JOptionPane.showMessageDialog(frame, "Error", "Change Password Failed!", JOptionPane.ERROR_MESSAGE);
+
+        // Proceed to change password if all validations pass
+        try {
+            frame.changePassword(username, password, confirmPassword);
+            JOptionPane.showMessageDialog(frame, "Password has been changed. You may now log in.", "Change Password", JOptionPane.OK_OPTION);
+            System.out.println("User Changing Password Done!!!");
             clearInputs();
+            frame.loginNav();
+        } catch (Exception e) {
+            System.out.println("ForgotPassword Error: " + e);
         }
         
     }//GEN-LAST:event_confirmUserBtnActionPerformed

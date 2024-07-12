@@ -62,6 +62,7 @@ public class Login extends javax.swing.JPanel {
         });
 
         passwordFld.setBackground(new java.awt.Color(240, 240, 240));
+        passwordFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         passwordFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passwordFld.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
@@ -121,7 +122,7 @@ public class Login extends javax.swing.JPanel {
                 clearInputs();
             } else {
                 accountAttempts++;
-                if (accountAttempts >= 5) {
+                if (accountAttempts == 5) {
                     frame.lockAccount(username);
                     JOptionPane.showMessageDialog(frame, "Account has been locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
                 } else {
