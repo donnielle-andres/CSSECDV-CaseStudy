@@ -194,6 +194,11 @@ public class MgmtUser extends javax.swing.JPanel {
 
     private void editRoleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRoleBtnActionPerformed
         if(table.getSelectedRow() >= 0){
+            String user = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+            if(user.equals(currentUser.getUsername())){
+                JOptionPane.showMessageDialog(null, "You can't change your own role! Please contact another Admin if you want to change your account's role.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
             String[] options = {"1-DISABLED", "2-CLIENT", "3-STAFF", "4-MANAGER", "5-ADMIN"};
             JComboBox<String> optionList = new JComboBox<>(options);
 
@@ -220,6 +225,7 @@ public class MgmtUser extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Failed to update role", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+            }
      }
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
@@ -237,25 +243,30 @@ public class MgmtUser extends javax.swing.JPanel {
 
     private void lockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lockBtnActionPerformed
         if (table.getSelectedRow() >= 0) {
-        String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
-        boolean currentlyLocked = "1".equals(tableModel.getValueAt(table.getSelectedRow(), 3).toString());
-        String state = currentlyLocked ? "unlock" : "lock";
-        int isLocked = currentlyLocked ? 0:1;
-        int result = JOptionPane.showConfirmDialog(null, 
-            "Are you sure you want to " + state + " " + username + "?", 
-            "CONFIRM ACTION", 
-            JOptionPane.YES_NO_OPTION
-        );
-        
-        if (result == JOptionPane.YES_OPTION) {
-            boolean statusChanged = sqlite.setUserLockedStatus(username, isLocked ,currentUser.getUsername());
-            if (statusChanged) {
-                JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
-            } else {
-                JOptionPane.showMessageDialog(null, "Failed to " + state + " user " + username, "Error", JOptionPane.ERROR_MESSAGE);
+            String username = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+            if(username == null ? currentUser.getUsername() == null : username.equals(currentUser.getUsername())){
+                JOptionPane.showMessageDialog(null, "You can't lock yourself! Please contact an Admin if you want to lock your account.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
+            else{
+                boolean currentlyLocked = "1".equals(tableModel.getValueAt(table.getSelectedRow(), 3).toString());
+                String state = currentlyLocked ? "unlock" : "lock";
+                int isLocked = currentlyLocked ? 0:1;
+                int result = JOptionPane.showConfirmDialog(null, 
+                    "Are you sure you want to " + state + " " + username + "?", 
+                    "CONFIRM ACTION", 
+                    JOptionPane.YES_NO_OPTION
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    boolean statusChanged = sqlite.setUserLockedStatus(username, isLocked ,currentUser.getUsername());
+                    if (statusChanged) {
+                        JOptionPane.showMessageDialog(null, "User " + username + " has been " + state + "ed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        tableModel.setValueAt(!currentlyLocked ? "1" : "0", table.getSelectedRow(), 3); 
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to " + state + " user " + username, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
 }
 
     }//GEN-LAST:event_lockBtnActionPerformed
