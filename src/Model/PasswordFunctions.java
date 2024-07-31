@@ -8,6 +8,10 @@ import java.util.regex.*;
 
 
 public class PasswordFunctions {
+    
+    public int minLength = 15;
+    public int maxLength = 64;
+    
     // PASSWORD HASHING
     public static String hashInput(String plainInput) {
         String salt = BCrypt.gensalt();
@@ -25,9 +29,9 @@ public class PasswordFunctions {
         String lowerCasePassword = plainPassword.toLowerCase();
         String lowerCaseUsername = username.toLowerCase();
         
-        // Must be minimum length of 15
-        if (plainPassword.length() < 15){
-            //System.out.println("Password is short");
+        // Must be minimum length of 15 and maximum of 64
+        if (plainPassword.length() < 15 || plainPassword.length() > 64){
+            //System.out.println("Password length must be minimum length of 15 and maximum of 64");
             return false;
         }
         
@@ -45,10 +49,7 @@ public class PasswordFunctions {
         if (!upperCaseMatcher.find()) {
             // System.out.println("Password must have uppercase");
             return false;
-        }
-    
-        
-        else if (!lowerCaseMatcher.find()) {
+        }else if (!lowerCaseMatcher.find()) {
             // System.out.println("Password must have lowercase");
             return false;
         }

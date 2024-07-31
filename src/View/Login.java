@@ -104,42 +104,49 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-    String username = usernameFld.getText();
-    String actualPassword = new String(passwordFld.getPassword());
+        String username = usernameFld.getText();
+        String actualPassword = new String(passwordFld.getPassword());
 
-    if (!username.isEmpty() && !actualPassword.isEmpty()) {
-        boolean userExists = frame.checkExistingUser(username);
+        if (!username.isEmpty() && !actualPassword.isEmpty()) {
+            boolean userExists = frame.checkExistingUser(username);
 
-        if (userExists) {
-            boolean loginSuccessful = frame.loginAction(username, actualPassword);
+            if (userExists) {
+                boolean loginSuccessful = frame.loginAction(username, actualPassword);
 
-            if (loginSuccessful && !frame.checkAccountStatus(username)) {
-                frame.mainNav(username);
-                clearInputs();
-            } else if (frame.checkAccountStatus(username)) {
-                JOptionPane.showMessageDialog(frame, "Account is locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-                clearInputs();
-            } else {
-                accountAttempts++;
-                if (accountAttempts >= 5) {
-                    frame.lockAccount(username);
-                    JOptionPane.showMessageDialog(frame, "Account has been locked! Please contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                if (loginSuccessful && !frame.checkAccountStatus(username)) {
+                    frame.mainNav(username);
+                    clearInputs();
+                } else if (frame.checkAccountStatus(username)) {
+                    JOptionPane.showMessageDialog(frame, LoginErrorMessages.ACCOUNT_LOCKED, "Login Error", JOptionPane.ERROR_MESSAGE);
+                    clearInputs();
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                    accountAttempts++;
+                    if (accountAttempts >= 5) {
+                        frame.lockAccount(username);
+                        JOptionPane.showMessageDialog(frame, LoginErrorMessages.ACCOUNT_LOCKED_AFTER_ATTEMPTS, "Login Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, LoginErrorMessages.LOGIN_FAILED, "Login Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(frame, LoginErrorMessages.LOGIN_FAILED, "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password, or contact your administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, LoginErrorMessages.EMPTY_FIELDS, "Login Error", JOptionPane.ERROR_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(frame, "Login failed. Please check your username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-    }
 
-    clearInputs();
-
+        clearInputs();
     }//GEN-LAST:event_loginBtnActionPerformed
 
+    public class LoginErrorMessages {
+        public static final String EMPTY_FIELDS = "Login failed!";
+        public static final String ACCOUNT_LOCKED = "Please contact your administrator.";
+        public static final String ACCOUNT_LOCKED_AFTER_ATTEMPTS = "Account has been locked! Please contact your administrator.";
+        public static final String LOGIN_FAILED = "Login failed!";
+    }
+    
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
+        clearInputs();
         frame.registerNav();
     }//GEN-LAST:event_registerBtnActionPerformed
 
@@ -148,6 +155,7 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_usernameFldActionPerformed
 
     private void forgotPassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forgotPassBtnActionPerformed
+        clearInputs();
         frame.forgotPassNav();
     }//GEN-LAST:event_forgotPassBtnActionPerformed
 

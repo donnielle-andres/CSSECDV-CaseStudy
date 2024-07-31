@@ -142,14 +142,14 @@ public class Register extends javax.swing.JPanel {
 
         // CHECK COMPLETE INPUTS
         if (username.equals("") || password.equals("") || confirmPassword.equals("") || mfaInput1.equals("") || mfaInput2.equals("")) {
-            JOptionPane.showMessageDialog(frame, "Must complete all fields!", "Registration Failed!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Registration failed!", "Registration Error", JOptionPane.INFORMATION_MESSAGE);
         }
         // VALIDATE USERNAME
         else if (!isValidUsername) {
             JOptionPane.showMessageDialog(frame, "Username must consists of atleast 8 characters and 2 digits", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
         else if (!isNewUser || !password.equals(confirmPassword)){
-            JOptionPane.showMessageDialog(frame, "Check username and password", "Registration Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Registration failed!", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
         // VALIDATE PASSWORD
         else if (!PasswordFunctions.validatePassword(password, username)) {
@@ -158,7 +158,7 @@ public class Register extends javax.swing.JPanel {
         else {
             // All validations passed, proceed with registration
             frame.registerAction(username, password, confirmPassword, mfaInput1, mfaInput2);
-            JOptionPane.showMessageDialog(frame, "Registration Successful. You may now log in.", "Registration Successful!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Registration Successful.", "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
             frame.loginNav(); 
             
         }
