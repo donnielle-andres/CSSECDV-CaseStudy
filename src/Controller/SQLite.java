@@ -184,7 +184,11 @@ public class SQLite {
         }
     }
     
-    public void addProduct(String name, int stock, double price, String userActor) {
+    public void addProduct(String uncName, int uncStock, double uncPrice, String uncUserActor) {
+        String name = Model.InputSanitation.sanitizeString(uncName);
+        String userActor = Model.InputSanitation.sanitizeString(uncUserActor);
+        int stock = Model.InputSanitation.sanitizeInt(Integer.toString(uncStock));
+        Double price = Model.InputSanitation.sanitizeMoney(Double.toString(uncPrice));
         String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
         String formattedDateTime = getTime();
         addLogs( "ADDPD", userActor, name + " was added with qty "+stock+" and price "+price, formattedDateTime);
@@ -490,13 +494,16 @@ public class SQLite {
     
     public void editProduct(String name, String newName, int stock, double price, String userActor) {
         String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
-
+        String cleanedNewName = Model.InputSanitation.sanitizeString(newName);
+        String cleanedName = Model.InputSanitation.sanitizeString(name);
+        int cleanedStock = Model.InputSanitation.sanitizeInt(Integer.toString(stock));
+        Double cleanedPrice = Model.InputSanitation.sanitizeMoney(Double.toString(price));
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newName);
-            pstmt.setInt(2, stock);
-            pstmt.setDouble(3, price);
-            pstmt.setString(4, name);
+            pstmt.setString(1, cleanedNewName);
+            pstmt.setInt(2, cleanedStock);
+            pstmt.setDouble(3, cleanedPrice);
+            pstmt.setString(4, cleanedName);
             int rowsUpdated = pstmt.executeUpdate();
 
             if (rowsUpdated > 0) {
@@ -528,9 +535,10 @@ public class SQLite {
         return product;
     }
     
-    public boolean buyProduct(String name, int quantity) {
+    public boolean buyProduct(String name, int uncQuantity) {
         String selectSql = "SELECT stock FROM product WHERE name=?";
         String updateSql = "UPDATE product SET stock=? WHERE name=?";
+        int quantity = Model.InputSanitation.sanitizeInt(Integer.toString(uncQuantity));
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement selectStmt = conn.prepareStatement(selectSql);
              PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {

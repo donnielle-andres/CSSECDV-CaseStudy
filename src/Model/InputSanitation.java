@@ -11,7 +11,7 @@ package Model;
 
 public class InputSanitation {
 
-    public int sanitizeInt(String input) {
+    public static int sanitizeInt(String input) {
         // This sanitizes an input to be only WHOLE, POSITIVE numbers
         if (input == null || input.isEmpty()) {
             return 0;
@@ -35,7 +35,7 @@ public class InputSanitation {
         }
     }
 
-    public double sanitizeMoney(String input) {
+    public static double sanitizeMoney(String input) {
         // This sanitizes an input to be only Positive numbers (decimals allowed)
         if (input == null || input.isEmpty()) {
             return 0.0;
@@ -59,7 +59,7 @@ public class InputSanitation {
         }
     }
 
-    public String sanitizeString(String input) {
+    public static String sanitizeString(String input) {
 
         if (input == null || input.trim().isEmpty()) {
             return "";
