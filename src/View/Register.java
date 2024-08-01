@@ -146,14 +146,14 @@ public class Register extends javax.swing.JPanel {
         }
         // VALIDATE USERNAME
         else if (!isValidUsername) {
-            JOptionPane.showMessageDialog(frame, "Username must consists of atleast 8 characters and 2 digits", "Registration Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Username is weak", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
         else if (!isNewUser || !password.equals(confirmPassword)){
             JOptionPane.showMessageDialog(frame, "Registration failed!", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }
         // VALIDATE PASSWORD
         else if (!PasswordFunctions.validatePassword(password, username)) {
-            JOptionPane.showMessageDialog(frame, "Password must contain at least 15 characters, including both uppercase and lowercase letters, at least 2 digits, 1 special character, and must not contain the username", "Registration Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Password is weak", "Registration Error", JOptionPane.ERROR_MESSAGE);
         }       
         else {
             // All validations passed, proceed with registration
