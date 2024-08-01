@@ -190,7 +190,7 @@ public class ForgotPassword extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(frame, "Change Password failed", "Change Password Failed", JOptionPane.ERROR_MESSAGE);
             clearInputs();
         }else if (PasswordFunctions.validatePassword(password, username) == false){
-            JOptionPane.showMessageDialog(frame, "Please check Password Requirements", "Change Password", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Password is weak", "Change Password", JOptionPane.ERROR_MESSAGE);
             clearInputs();
         }
         else if (checkMFA && (frame.checkAccountStatus(username)==false) && frame.checkExistingUser(username)){
