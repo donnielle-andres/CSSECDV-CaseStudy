@@ -39,9 +39,10 @@ public class MgmtProduct extends javax.swing.JPanel {
         if (currentUser.getRole()==2){ //Client can only buy stuff
             purchaseBtn.setVisible(true);
         }
-        else if(currentUser.getRole()==3){ //Staff can add and edit, but not buy
+        else if(currentUser.getRole()==3){ //Staff can add, edit, and delete but not buy
             addBtn.setVisible(true);
             editBtn.setVisible(true);
+            deleteBtn.setVisible(true);  
         }
         else if(currentUser.getRole()==4||currentUser.getRole()==5){ //admins and managers can do everything
             purchaseBtn.setVisible(true);
