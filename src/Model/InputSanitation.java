@@ -7,18 +7,21 @@ package Model;
  *
  * @author Angel
  */
+import java.util.regex.Pattern;
 
 
 public class InputSanitation {
 
+    private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$"); // Matches whole positive integers
+    private static final Pattern MONEY_PATTERN = Pattern.compile("^\\d*\\.?\\d*$"); // Matches positive decimals
+
+    
     public static int sanitizeInt(String input) {
-        // This sanitizes an input to be only WHOLE, POSITIVE numbers
-        if (input == null || input.isEmpty()) {
+        if (input == null || input.isEmpty() || !INT_PATTERN.matcher(input).matches()) {
             return 0;
         }
 
         input = input.replaceAll("[^0-9]", "");
-
         if (input.isEmpty()) {
             return 0;
         }
@@ -37,12 +40,11 @@ public class InputSanitation {
 
     public static double sanitizeMoney(String input) {
         // This sanitizes an input to be only Positive numbers (decimals allowed)
-        if (input == null || input.isEmpty()) {
+        if (input == null || input.isEmpty() || !MONEY_PATTERN.matcher(input).matches()) {
             return 0.0;
         }
 
         input = input.replaceAll("[^0-9.]", "");
-
         if (input.isEmpty()) {
             return 0.0;
         }
@@ -60,17 +62,17 @@ public class InputSanitation {
     }
 
     public static String sanitizeString(String input) {
-
         if (input == null || input.trim().isEmpty()) {
             return "";
         }
 
-        // Remove potentially harmful characters
-        String sanitized = input.replaceAll("[<>\"'%;)(&+]", "");
+        // Expanded character removal
+        String sanitized = input.replaceAll("[<>\"'%;)(&+\\\\\r\n]", "");
 
-    
-        sanitized = sanitized.replaceAll("([\\\\])", "\\\\$1");
-        sanitized = sanitized.replaceAll("([\r\n])", "");
+        // Additional validation for string length (optional, depending on requirements)
+        if (sanitized.length() > 255) { // Example limit
+            throw new IllegalArgumentException("Input string exceeds maximum length.");
+        }
 
         return sanitized;
     }

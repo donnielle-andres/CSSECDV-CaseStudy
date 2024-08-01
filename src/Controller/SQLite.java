@@ -204,7 +204,9 @@ public class SQLite {
     
     
     //FOR LOG IN
-    public boolean validateUser(String username, String password) {
+    public boolean validateUser(String username, String pass) {
+        String sanitizedUsername = Model.InputSanitation.sanitizeString(username);
+        String password = Model.InputSanitation.sanitizeString(pass);       
         String sql = "SELECT password, locked FROM users WHERE username = ?";
         String hashedPass = null;
         boolean isLocked = false;
@@ -213,7 +215,7 @@ public class SQLite {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Set the value for the username parameter
-            pstmt.setString(1, username);
+            pstmt.setString(1, sanitizedUsername);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -252,7 +254,10 @@ public class SQLite {
 
     
     // FOR FORGET PASSWORD
-    public boolean checkMFAs(String username, String mfa1, String mfa2) {
+    public boolean checkMFAs(String username, String unsantized_mfa1, String unsantized_mfa2) {
+        String sanitizedUsername = Model.InputSanitation.sanitizeString(username);
+        String mfa1 = Model.InputSanitation.sanitizeString(unsantized_mfa1);
+        String mfa2 = Model.InputSanitation.sanitizeString(unsantized_mfa2);
         String sql = "SELECT username, mfa1, mfa2 FROM users WHERE username = ?";
         String hashedMfa1 = null;
         String hashedMfa2 = null;
@@ -261,7 +266,7 @@ public class SQLite {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Set the value for the username parameter
-            pstmt.setString(1, username);
+            pstmt.setString(1, sanitizedUsername);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
