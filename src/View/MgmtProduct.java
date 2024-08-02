@@ -197,14 +197,14 @@ public class MgmtProduct extends javax.swing.JPanel {
             designer(stockFld, "PRODUCT STOCK");
 
             Object[] message = {
-                "How many " + tableModel.getValueAt(table.getSelectedRow(), 0) + " do you want to purchase?", stockFld
+                "How many " + tableModel.getValueAt(table.getSelectedRow(), 0) + " do you want to purchase? Ensure that the number is valid.", stockFld
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
                 //System.out.println(stockFld.getText());
-                int stockBought = Integer.parseInt(stockFld.getText());
+                int stockBought = Model.InputSanitation.sanitizeInt(stockFld.getText());
                 String productBought = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 boolean purchaseSuccessfull = sqlite.buyProduct(productBought, stockBought);
                 if(purchaseSuccessfull){
@@ -219,7 +219,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
-//NOT IMPLEMENTED YET
+
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         JTextField nameFld = new JTextField();
         JTextField stockFld = new JTextField();
@@ -236,11 +236,16 @@ public class MgmtProduct extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
         
         if (result == JOptionPane.OK_OPTION) {
-            String name = nameFld.getText();
-            int stock = Integer.parseInt(stockFld.getText());
-            double price = Double.parseDouble(priceFld.getText());
-            sqlite.addProduct(name, stock, price, currentUser.getUsername());
-            JOptionPane.showMessageDialog(this, "Product added successfully!", "Product Addition Successfull", JOptionPane.OK_OPTION);
+            String name =Model.InputSanitation.sanitizeString( nameFld.getText());
+            int stock = Model.InputSanitation.sanitizeInt(stockFld.getText());
+            double price = Model.InputSanitation.sanitizeMoney(priceFld.getText());
+            boolean didOccur = sqlite.addProduct(name, stock, price, currentUser.getUsername());
+            if(didOccur){
+                JOptionPane.showMessageDialog(this, "Product added successfully!", "Product Addition Successfull", JOptionPane.OK_OPTION);                
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Product added unsuccessfully! Please check your inputs!", "Product Addition Unsuccessfull", JOptionPane.OK_OPTION); 
+            }
             //System.out.println(nameFld.getText());
             //System.out.println(stockFld.getText());
             //System.out.println(priceFld.getText());
@@ -264,11 +269,16 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
-                   String newName = nameFld.getText();
-                   int newStock = Integer.parseInt(stockFld.getText());
-                   double newPrice = Double.parseDouble(priceFld.getText());
-                   sqlite.editProduct(currentName, newName, newStock, newPrice, currentUser.getUsername());
-                   JOptionPane.showMessageDialog(this, "Product edited successfully!", "Product Edits Successfull", JOptionPane.OK_OPTION);
+                   String newName = Model.InputSanitation.sanitizeString( nameFld.getText());
+                   int newStock = Model.InputSanitation.sanitizeInt(stockFld.getText());
+                   double newPrice = Model.InputSanitation.sanitizeMoney(priceFld.getText());
+                   boolean didEdit = sqlite.editProduct(currentName, newName, newStock, newPrice, currentUser.getUsername());
+                   if(didEdit){
+                       JOptionPane.showMessageDialog(this, "Product edited successfully!", "Product Edits Successfull", JOptionPane.OK_OPTION);
+                   }
+                   else{
+                       JOptionPane.showMessageDialog(this, "Product edited unsuccessfully! Please double check your inputs!", "Product Edits Unsuccessfull", JOptionPane.OK_OPTION);
+                   }
                    //System.out.println(newName);
                    //System.out.println(newStock);
                    //System.out.println(newPrice);

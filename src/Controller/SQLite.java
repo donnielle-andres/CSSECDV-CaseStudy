@@ -184,22 +184,33 @@ public class SQLite {
         }
     }
     
-    public void addProduct(String uncName, int uncStock, double uncPrice, String uncUserActor) {
-        String name = Model.InputSanitation.sanitizeString(uncName);
-        String userActor = Model.InputSanitation.sanitizeString(uncUserActor);
-        int stock = Model.InputSanitation.sanitizeInt(Integer.toString(uncStock));
-        Double price = Model.InputSanitation.sanitizeMoney(Double.toString(uncPrice));
-        String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
-        String formattedDateTime = getTime();
-        addLogs( "ADDPD", userActor, name + " was added with qty "+stock+" and price "+price, formattedDateTime);
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
-        } catch (Exception ex) {
-            System.out.print(ex);
-        }
+public boolean addProduct(String uncName, int uncStock, double uncPrice, String uncUserActor) {
+    // Sanitize inputs
+    String name = Model.InputSanitation.sanitizeString(uncName);
+    String userActor = Model.InputSanitation.sanitizeString(uncUserActor);
+    int stock = Model.InputSanitation.sanitizeInt(Integer.toString(uncStock));
+    double price = Model.InputSanitation.sanitizeMoney(Double.toString(uncPrice)); // Assuming this returns a double
+
+    if (name.isEmpty() || userActor.isEmpty() || stock <= 0 || price <= 0) {
+        //System.out.println("Invalid input values.");
+        return false;
     }
-    
+
+    String sql = "INSERT INTO product(name, stock, price) VALUES(?, ?, ?)";
+
+    try (Connection conn = DriverManager.getConnection(driverURL);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, name);
+        pstmt.setInt(2, stock);
+        pstmt.setDouble(3, price);
+        pstmt.executeUpdate();
+        String formattedDateTime = getTime();
+        addLogs("ADDPD", userActor, name + " was added with qty " + stock + " and price " + price, formattedDateTime);
+        return true;
+    } catch (Exception ex) {
+        return false;
+    }
+}
 
     
     
@@ -497,12 +508,13 @@ public class SQLite {
         }
     }
     
-    public void editProduct(String name, String newName, int stock, double price, String userActor) {
+    public boolean editProduct(String name, String newName, int stock, double price, String userActor) {
         String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
         String cleanedNewName = Model.InputSanitation.sanitizeString(newName);
         String cleanedName = Model.InputSanitation.sanitizeString(name);
         int cleanedStock = Model.InputSanitation.sanitizeInt(Integer.toString(stock));
         Double cleanedPrice = Model.InputSanitation.sanitizeMoney(Double.toString(price));
+        if(cleanedStock>0&&cleanedPrice>0&&!cleanedNewName.isEmpty()){
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, cleanedNewName);
@@ -514,12 +526,18 @@ public class SQLite {
             if (rowsUpdated > 0) {
                 String formattedDateTime = getTime();
                 addLogs("EDTPD", userActor, name + " (Product) was edited.", formattedDateTime);
-   
+                return true;
             } else {
-                System.out.println("Product '" + name + "' not found.");
+                return false;
+                //System.out.println("Product '" + name + "' not found.");
             }
         } catch (Exception ex) {
-            System.out.println("Error updating product: " + ex.getMessage());
+            //System.out.println("Error updating product: " + ex.getMessage());
+            return false;
+        }
+        }
+        else{
+            return false;
         }
     }
 
@@ -549,7 +567,7 @@ public class SQLite {
              PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
             selectStmt.setString(1, name);
             try (ResultSet rs = selectStmt.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next()&&quantity>0) {
                     int currentStock = rs.getInt("stock");
                     if (currentStock >= quantity) {
                         int newStock = currentStock - quantity;
