@@ -39,10 +39,7 @@ public class MgmtUser extends javax.swing.JPanel {
         deleteBtn.setVisible(false);
         lockBtn.setVisible(false);
         chgpassBtn.setVisible(false);
-        if(role==4){ //manager
-            lockBtn.setVisible(true);
-        }
-        else if(role==5){ //admin
+        if(role==5){ //admin
             editRoleBtn.setVisible(true);
             deleteBtn.setVisible(true);
             lockBtn.setVisible(true);
