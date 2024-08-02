@@ -461,12 +461,14 @@ public class SQLite {
             pstmt.setString(4, hashedmfa1);
             pstmt.setString(5, hashedmfa2);
             pstmt.executeUpdate();
+            
+            String formattedDateTime = getTime();
+            addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
 
         } catch (Exception ex) {
             //System.err.println("Add User Error: " + ex.getMessage());
         }
-        String formattedDateTime = getTime();
-        addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
+        
     }
     
     public void addUser(String username, String password, String mfa1, String mfa2) {
@@ -482,6 +484,9 @@ public class SQLite {
             pstmt.setString(3, hashedmfa1);
             pstmt.setString(4, hashedmfa2);
             pstmt.executeUpdate();
+            
+            String formattedDateTime = getTime();
+            addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
         } catch (Exception ex) {
             System.out.print(ex);
         }

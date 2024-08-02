@@ -52,7 +52,6 @@ public class ManagerHome extends javax.swing.JPanel {
         logsBtn.setVisible(false);
         if(activeUser.getRole()==4){
             historyBtn.setVisible(true);
-            usersBtn.setVisible(true);
             productsBtn.setVisible(true);            
         }
     }
