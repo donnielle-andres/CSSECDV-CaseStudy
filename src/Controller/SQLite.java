@@ -174,43 +174,48 @@ public class SQLite {
     }
     
     public void addLogs(String event, String username, String desc, String timestamp) {
-        String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
-        
+        String sql = "INSERT INTO logs(event, username, desc, timestamp) VALUES(?, ?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, event);
+            pstmt.setString(2, username);
+            pstmt.setString(3, desc);
+            pstmt.setString(4, timestamp);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
-            System.out.print(ex);
+            System.out.println("Error adding log: " + ex.getMessage());
         }
     }
+
     
-public boolean addProduct(String uncName, int uncStock, double uncPrice, String uncUserActor) {
-    // Sanitize inputs
-    String name = Model.InputSanitation.sanitizeString(uncName);
-    String userActor = Model.InputSanitation.sanitizeString(uncUserActor);
-    int stock = Model.InputSanitation.sanitizeInt(Integer.toString(uncStock));
-    double price = Model.InputSanitation.sanitizeMoney(Double.toString(uncPrice)); // Assuming this returns a double
+    public boolean addProduct(String uncName, int uncStock, double uncPrice, String uncUserActor) {
+        // Sanitize inputs
+        String name = Model.InputSanitation.sanitizeString(uncName);
+        String userActor = Model.InputSanitation.sanitizeString(uncUserActor);
+        int stock = Model.InputSanitation.sanitizeInt(Integer.toString(uncStock));
+        double price = Model.InputSanitation.sanitizeMoney(Double.toString(uncPrice)); // Assuming this returns a double
 
-    if (name.isEmpty() || userActor.isEmpty() || stock <= 0 || price <= 0) {
-        //System.out.println("Invalid input values.");
-        return false;
+        if (name.isEmpty() || userActor.isEmpty() || stock <= 0 || price <= 0) {
+            //System.out.println("Invalid input values.");
+            return false;
+        }
+
+        String sql = "INSERT INTO product(name, stock, price) VALUES(?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            pstmt.executeUpdate();
+            String formattedDateTime = getTime();
+            addLogs("ADDPD", userActor, name + " was added with qty " + stock + " and price " + price, formattedDateTime);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
-
-    String sql = "INSERT INTO product(name, stock, price) VALUES(?, ?, ?)";
-
-    try (Connection conn = DriverManager.getConnection(driverURL);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        pstmt.setString(1, name);
-        pstmt.setInt(2, stock);
-        pstmt.setDouble(3, price);
-        pstmt.executeUpdate();
-        String formattedDateTime = getTime();
-        addLogs("ADDPD", userActor, name + " was added with qty " + stock + " and price " + price, formattedDateTime);
-        return true;
-    } catch (Exception ex) {
-        return false;
-    }
-}
 
     
     
