@@ -67,7 +67,7 @@ public class InputSanitation {
         }
 
         // Expanded character removal
-        String sanitized = input.replaceAll("[<>\"'%;)(&+\\\\\r\n]", "");
+        String sanitized = input.replaceAll("[\"'%;)(+\\\\\r\n]", "");
 
         if (sanitized.length() > 255) { 
             throw new IllegalArgumentException("Input string exceeds maximum length.");
