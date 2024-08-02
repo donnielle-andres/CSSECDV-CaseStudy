@@ -376,7 +376,7 @@ public class Frame extends javax.swing.JFrame {
             main.sqlite.changePassword(username, password, confpassword, username);
             return true;
         } catch (Exception e) {
-            System.err.println("An error occurred while changing the password: " + e.getMessage());
+            //System.err.println("An error occurred while changing the password: " + e.getMessage());
             return false;
         }
     }

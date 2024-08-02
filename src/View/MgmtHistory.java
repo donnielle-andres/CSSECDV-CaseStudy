@@ -46,7 +46,7 @@ public class MgmtHistory extends javax.swing.JPanel {
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
-        System.out.println("currentUser" + currentUser.getUsername());
+//        System.out.println("currentUser" + currentUser.getUsername());
         int currentUserRole = currentUser.getRole();
         if(currentUserRole == 2){ //only get the user history
             ArrayList<History> history = sqlite.getUserHistory(currentUser.getUsername());

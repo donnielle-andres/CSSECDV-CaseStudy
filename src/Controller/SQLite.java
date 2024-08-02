@@ -45,7 +45,7 @@ public class SQLite {
             stmt.execute(sql);
             //System.out.println("Table history in database.db created.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -63,7 +63,7 @@ public class SQLite {
             stmt.execute(sql);
             //System.out.println("Table logs in database.db created.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
      
@@ -80,7 +80,7 @@ public class SQLite {
             stmt.execute(sql);
             //System.out.println("Table product in database.db created.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
      
@@ -109,7 +109,7 @@ public class SQLite {
             }
             */
         } catch (Exception ex) {
-            System.err.println("createUserTable Error: " + ex.getMessage());
+            //System.err.println("createUserTable Error: " + ex.getMessage());
         }
     }
     
@@ -119,9 +119,9 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table history in database.db dropped.");
+            //System.out.println("Table history in database.db dropped.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -131,9 +131,9 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table logs in database.db dropped.");
+            //System.out.println("Table logs in database.db dropped.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -143,9 +143,9 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table product in database.db dropped.");
+            //System.out.println("Table product in database.db dropped.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -155,9 +155,9 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Table users in database.db dropped.");
+            //System.out.println("Table users in database.db dropped.");
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -184,7 +184,7 @@ public class SQLite {
             pstmt.setString(4, timestamp);
             pstmt.executeUpdate();
         } catch (Exception ex) {
-            System.out.println("Error adding log: " + ex.getMessage());
+            //System.out.println("Error adding log: " + ex.getMessage());
         }
     }
 
@@ -439,7 +439,7 @@ public class SQLite {
 
             }
         } catch (Exception ex) {
-            System.err.println("Get User Info Error: " + ex.getMessage());
+            //System.err.println("Get User Info Error: " + ex.getMessage());
         }
 
         return activeUser;
@@ -463,7 +463,7 @@ public class SQLite {
             pstmt.executeUpdate();
 
         } catch (Exception ex) {
-            System.err.println("Add User Error: " + ex.getMessage());
+            //System.err.println("Add User Error: " + ex.getMessage());
         }
         String formattedDateTime = getTime();
         addLogs( "RGSTR", username, username + " was registered", formattedDateTime);
@@ -496,7 +496,7 @@ public class SQLite {
             String formattedDateTime = getTime();
             addLogs("DELETE", userActor, userActor + " has deleted "+username, formattedDateTime);
         } catch (Exception ex) {
-            System.out.print(ex);
+            //System.out.print(ex);
         }
     }
     
@@ -509,7 +509,7 @@ public class SQLite {
             pstmt.executeUpdate();
             addLogs( "DELPD", userActor, name + " (Product) was deleted.", getTime());
         } catch (Exception ex) {
-            System.out.println("Error deleting product: " + ex.getMessage());
+            //System.out.println("Error deleting product: " + ex.getMessage());
         }
     }
     
@@ -708,7 +708,7 @@ public class SQLite {
             }
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            //System.err.println(e.getMessage());
             return false;
         }
         

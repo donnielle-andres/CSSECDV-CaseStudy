@@ -198,13 +198,13 @@ public class ForgotPassword extends javax.swing.JPanel {
             try {
                 frame.changePassword(username, password, confirmPassword);
                 JOptionPane.showMessageDialog(frame, "Password has been changed.", "Change Password", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("User Changing Password Done!!!");
+                //System.out.println("User Changing Password Done!!!");
                 clearInputs();
                 frame.loginNav();
                 
             } catch (Exception e) {
                 //JOptionPane.showMessageDialog(frame, "An error occurred while changing the password.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println("ForgotPassword Error: " + e);
+                //System.out.println("ForgotPassword Error: " + e);
             }
             
         }else{
